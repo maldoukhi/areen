@@ -31,9 +31,9 @@ return [
         'label' => 'الهدف',
         'strength' => 'قوة',
         'hypertrophy' => 'تضخيم',
-        'fat_loss' => 'خسارة دهون',
+        'fat-loss' => 'خسارة دهون',
         'endurance' => 'تحمّل',
-        'general_fitness' => 'لياقة عامة',
+        'general-fitness' => 'لياقة عامة',
         'any' => 'كل الأهداف',
     ],
 

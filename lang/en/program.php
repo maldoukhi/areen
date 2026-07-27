@@ -31,9 +31,9 @@ return [
         'label' => 'Goal',
         'strength' => 'Strength',
         'hypertrophy' => 'Muscle size',
-        'fat_loss' => 'Fat loss',
+        'fat-loss' => 'Fat loss',
         'endurance' => 'Endurance',
-        'general_fitness' => 'General fitness',
+        'general-fitness' => 'General fitness',
         'any' => 'Any goal',
     ],
 
