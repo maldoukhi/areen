@@ -43,6 +43,8 @@
              alt=""
              loading="lazy"
              decoding="async"
+             x-data
+             x-on:error="$el.remove()"
              class="aspect-4/3 w-full rounded-md bg-ink-900 object-cover">
     @endif
 

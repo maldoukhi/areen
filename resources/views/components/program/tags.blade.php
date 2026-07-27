@@ -8,6 +8,10 @@
   `goal` is stored as a stable English slug, so the label is looked up rather
   than stored. An unrecognised slug drops the chip instead of printing the raw
   translation key on the screen.
+
+  Anything passed in the slot joins the same wrapping row, which is how the
+  overview adds its "private program" badge without nesting a second flex row
+  inside this one.
 --}}
 
 @php
@@ -16,6 +20,8 @@
 @endphp
 
 <div {{ $attributes->class('flex flex-wrap items-center gap-2') }}>
+    {{ $slot }}
+
     @if ($program->level)
         <x-ui.chip>{{ $program->level->label() }}</x-ui.chip>
     @endif
