@@ -50,6 +50,8 @@ return [
         'sync_now' => 'Send them now',
         'rejected' => 'One set was not accepted. Open the session again to check it.',
         'rest_panel' => 'Rest between sets',
+        'not_enrolled_title' => 'This plan is not one of yours yet',
+        'not_enrolled_body' => 'Open :program and start it, then your sets are logged against it.',
         'no_day_title' => 'Pick a day to log',
         'no_day_body' => 'Open a day from your program and the sets show up here ready to fill in.',
         'rest_day_title' => 'This day is a rest day',

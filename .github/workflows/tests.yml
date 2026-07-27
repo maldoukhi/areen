@@ -34,6 +34,14 @@ jobs:
       - name: Check formatting
         run: vendor/bin/pint --test
 
+      # Two of the suite's rules are checked against the source files rather than
+      # against a rendered page — no hardcoded Arabic in Blade, and no
+      # physical-direction utilities — and both scan with ripgrep. `grep -P` is
+      # NOT a substitute: it rejects \x{0600} as "too large" and exits 2, which a
+      # naive check reads as a pass.
+      - name: Install ripgrep
+        run: sudo apt-get update && sudo apt-get install -y ripgrep
+
       - name: Run tests
         run: php artisan test
 
@@ -45,12 +53,55 @@ jobs:
       - name: Install JS dependencies
         run: npm ci
 
-      # Also proves scripts/lift-service-worker.mjs put the worker at public/sw.js.
       - name: Build assets
         run: npm run build
 
-      - name: Assert the service worker is scoped to the site root
-        run: test -f public/sw.js
+      # ------------------------------------------------------------------
+      # The two service-worker invariants.
+      #
+      # Both fail silently, and both fail only in production, which is exactly
+      # why they are asserted here rather than trusted. See README.md.
+      # ------------------------------------------------------------------
 
-      - name: Assert Livewire requests are never cached
-        run: grep -q 'livewire\[-/\]' public/sw.js
+      - name: Assert the service worker is scoped to the site root
+        run: |
+          # Left at /build/sw.js the worker's scope is /build/ and it controls no
+          # page of the site: no precache, no offline page, no background sync.
+          # Registration still succeeds, so nothing reports the loss.
+          test -f public/sw.js || {
+            echo '::error::public/sw.js is missing — scripts/lift-service-worker.mjs did not run.'
+            echo '::error::npm run build must stay "vite build && node scripts/lift-service-worker.mjs".'
+            exit 1
+          }
+          test ! -f public/build/sw.js || {
+            echo '::error::A worker was left at public/build/sw.js. Its scope is /build/ and it controls nothing.'
+            exit 1
+          }
+          echo 'SW-AT-ROOT'
+          echo 'NOT-IN-BUILD'
+
+      - name: Assert the Livewire bypass is a shape match, not a literal path
+        run: |
+          # Livewire 4 derives its endpoint prefix from APP_KEY
+          # (/livewire-<8 hex>/update), and APP_KEY differs between the build
+          # machine and the server. A literal path baked in here would match
+          # nothing in production, and Livewire responses would be served from
+          # cache: stale components, double submissions, logged sets that vanish.
+          rg -q 'livewire\[-/\]' public/sw.js || {
+            echo '::error::The Livewire bypass in vite.config.js is no longer a /^\/livewire[-/]/ shape match.'
+            echo '::error::Livewire responses will be cached in production. See README.md.'
+            exit 1
+          }
+          if rg -q 'url:"[^"]*livewire' public/sw.js; then
+            echo '::error::A literal livewire path was precached into the worker.'
+            exit 1
+          fi
+          echo 'LIVEWIRE-BYPASS-BY-SHAPE'
+
+      - name: Assert the worker still refuses to cache any write
+        run: |
+          rg -q 'NetworkOnly' public/sw.js || {
+            echo '::error::The NetworkOnly rule covering Livewire and every POST is gone from the built worker.'
+            exit 1
+          }
+          echo 'WRITES-NEVER-CACHED'

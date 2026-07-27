@@ -145,6 +145,49 @@ new class extends Component
         return $seconds > 0 ? $seconds : null;
     }
 
+    /**
+     * Whether this viewer can actually log against this plan.
+     *
+     * The logging screen resolves a programme through the trainee's own
+     * enrolment, so offering the button to anyone signed in promised something
+     * the destination could not deliver: the visitor landed on an empty screen,
+     * was sent to their dashboard, was sent on to the catalogue, and arrived
+     * back here — a loop with no way out.
+     */
+    #[Computed]
+    public function isEnrolled(): bool
+    {
+        $user = auth()->user();
+
+        return $user !== null
+            && $user->programs()->whereKey($this->program->getKey())->exists();
+    }
+
+    /**
+     * Join a published plan and go straight to logging.
+     *
+     * Only a plan this visitor could already read: `EnsureProgramIsViewable`
+     * guards the route, so reaching this method at all means either the plan is
+     * published or an access code opened it for this session.
+     */
+    public function startProgram(): void
+    {
+        $user = auth()->user();
+
+        abort_if($user === null, 403);
+
+        $user->programs()->syncWithoutDetaching([
+            $this->program->getKey() => ['started_at' => now(), 'is_active' => true],
+        ]);
+
+        unset($this->isEnrolled);
+
+        $this->redirectRoute('dashboard.log', [
+            'program' => $this->program->slug,
+            'day' => $this->dayNumber,
+        ], navigate: true);
+    }
+
     public function dayUrl(int $number): string
     {
         return route('programs.day', ['program' => $this->program, 'day' => $number]);
@@ -472,13 +515,25 @@ new class extends Component
                             </span>
                         </div>
 
-                        {{-- P4 seam: signed in, the button is the door to the logging screen. --}}
+                        {{--
+                          The button offers only what the next screen can honour:
+                          logging when this plan is already theirs, joining it when
+                          it is not, and an explanation when nobody is signed in.
+                        --}}
                         @auth
-                            <x-ui.button :href="route('dashboard.log', ['program' => $this->program->slug, 'day' => $this->dayNumber])"
-                                         wire:navigate
-                                         class="flex-1">
-                                {{ __('program.days.log_set') }}
-                            </x-ui.button>
+                            @if ($this->isEnrolled)
+                                <x-ui.button :href="route('dashboard.log', ['program' => $this->program->slug, 'day' => $this->dayNumber])"
+                                             wire:navigate
+                                             class="flex-1">
+                                    {{ __('program.days.log_set') }}
+                                </x-ui.button>
+                            @else
+                                <x-ui.button wire:click="startProgram"
+                                             wire:loading.attr="disabled"
+                                             class="flex-1">
+                                    {{ __('program.actions.start') }}
+                                </x-ui.button>
+                            @endif
                         @else
                             <x-ui.button aria-disabled="true"
                                          aria-describedby="log-set-note"

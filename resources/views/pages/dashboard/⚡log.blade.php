@@ -215,14 +215,34 @@ new class extends Component
     @if (! $day instanceof \App\Models\ProgramDay)
         <h1 class="text-2xl font-bold leading-tight text-ink-50">{{ __('trainee.log.title') }}</h1>
 
+        @php
+            // A named programme that did not resolve means one thing: it is not
+            // this trainee's. Saying so, and pointing back at it, is the way out —
+            // sending them to a dashboard that sends them to a catalogue that
+            // sends them back here is the loop this replaces.
+            $requested = filled($this->program)
+                ? \App\Models\Program::query()->where('slug', $this->program)->first()
+                : null;
+        @endphp
+
         <x-ui.empty-state class="mt-6">
-            <x-slot:title>{{ __('trainee.log.no_day_title') }}</x-slot:title>
-            <x-slot:body>{{ __('trainee.log.no_day_body') }}</x-slot:body>
-            <x-slot:action>
-                <x-ui.button :href="route('dashboard')" wire:navigate>
-                    {{ __('trainee.nav.dashboard') }}
-                </x-ui.button>
-            </x-slot:action>
+            @if ($requested)
+                <x-slot:title>{{ __('trainee.log.not_enrolled_title') }}</x-slot:title>
+                <x-slot:body>{{ __('trainee.log.not_enrolled_body', ['program' => $requested->name]) }}</x-slot:body>
+                <x-slot:action>
+                    <x-ui.button :href="route('programs.show', $requested)" wire:navigate>
+                        {{ __('program.actions.start') }}
+                    </x-ui.button>
+                </x-slot:action>
+            @else
+                <x-slot:title>{{ __('trainee.log.no_day_title') }}</x-slot:title>
+                <x-slot:body>{{ __('trainee.log.no_day_body') }}</x-slot:body>
+                <x-slot:action>
+                    <x-ui.button :href="route('programs.index')" wire:navigate>
+                        {{ __('program.actions.browse') }}
+                    </x-ui.button>
+                </x-slot:action>
+            @endif
         </x-ui.empty-state>
     @else
         <header class="flex flex-col gap-1">

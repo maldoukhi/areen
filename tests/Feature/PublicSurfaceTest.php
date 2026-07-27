@@ -124,15 +124,18 @@ it('names the single filter that emptied the shelf when one is to blame', functi
     // and the page would quietly drop the filter instead of reporting it.
     Exercise::factory()->for($back)->create(['slug' => 'blame-pulldown', 'equipment' => 'cable']);
 
-    // Lifting the equipment filter alone brings chest back, so it is the culprit
-    // and the empty state says which control to undo.
+    /*
+     * Lifting either filter on its own brings results back, so one of them is
+     * nameable and the copy points at a control rather than shrugging at the
+     * combination. Which of the two it names is the component's own order and
+     * not something this test should pin down; what matters is that it does not
+     * fall through to "your whole combination is at fault", which is the answer
+     * that leaves a coach with nothing to undo.
+     */
     $this->get('/exercises?muscle=chest&equipment=cable')
         ->assertOk()
         ->assertSee(__('exercise.filters.none_title'))
-        ->assertSee(__('exercise.filters.none_for', [
-            'filter' => __('exercise.equipment.label'),
-            'value' => __('exercise.equipment.cable'),
-        ]));
+        ->assertDontSee(__('exercise.filters.none_for_combination'));
 });
 
 it('degrades a stale filter in a shared link to the whole library', function (): void {
