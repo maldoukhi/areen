@@ -52,19 +52,46 @@
     class SetLogger extends HTMLElement {
         connectedCallback() {
             this.performedOn = this.dataset.date || '';
-            this.restPanel = this.querySelector('[data-rest-panel]');
+            this.restPanel = null;
             this.restHandle = null;
+
+            // Rounds this element has just queued. Until the server names them,
+            // no stale sync report is allowed to clear their ember dot.
+            this.optimistic = new Set();
 
             this.onClick = (event) => this.handleClick(event);
             this.onSyncState = (event) => this.applySyncState(event.detail || {});
             this.onRestStarted = () => this.showRest(true);
             this.onRestStopped = (event) => this.showRest(false, event.type === 'areen:rest-finished');
 
+            // Click is delegated to the element itself, so it is safe to bind
+            // before the rows exist.
             this.addEventListener('click', this.onClick);
             window.addEventListener('areen:sync-state', this.onSyncState);
             document.addEventListener('areen:rest-started', this.onRestStarted);
             document.addEventListener('areen:rest-cancelled', this.onRestStopped);
             document.addEventListener('areen:rest-finished', this.onRestStopped);
+
+            /*
+             * `connectedCallback` fires the instant the *opening* tag is parsed,
+             * so on a first page load none of the rows or the rest panel exist
+             * yet — the runtime is an inline classic script and therefore runs
+             * before them, which is exactly what makes it available offline.
+             * Anything that reads children waits for the parser to finish.
+             * A `wire:navigate` swap inserts the element with its children
+             * already attached, and lands in the immediate branch.
+             */
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', () => this.hydrate(), { once: true });
+            } else {
+                this.hydrate();
+            }
+        }
+
+        hydrate() {
+            if (! this.isConnected) return;
+
+            this.restPanel = this.querySelector('[data-rest-panel]');
 
             this.restore();
             this.countLogged();
@@ -172,6 +199,7 @@
             row.dataset.state = 'logged';
             row.dataset.sync = 'pending';
 
+            this.optimistic.add(record.client_uuid);
             this.countLogged();
 
             areen.offlineSync.enqueue(record);
@@ -208,6 +236,8 @@
                 const row = this.rowFor(uuid);
 
                 if (row) row.dataset.sync = 'synced';
+
+                this.optimistic.delete(uuid);
                 waiting.delete(uuid);
             });
 
@@ -215,15 +245,24 @@
                 const row = this.rowFor(entry.client_uuid);
 
                 if (row) row.dataset.sync = 'rejected';
+
+                this.optimistic.delete(entry.client_uuid);
                 waiting.delete(entry.client_uuid);
             });
 
-            // Anything the queue no longer holds and did not just fail has landed.
+            /*
+             * Anything the queue no longer holds and did not just fail has landed.
+             * A round queued a moment ago is exempt: a report whose read of the
+             * store started before the write would otherwise clear its dot before
+             * it had been sent at all.
+             */
             this.rows().forEach((row) => {
                 if (row.dataset.state !== 'logged' || ! row.dataset.uuid) return;
                 if (row.dataset.sync === 'rejected') return;
 
-                row.dataset.sync = waiting.has(row.dataset.uuid) ? 'pending' : 'synced';
+                const stillHere = waiting.has(row.dataset.uuid) || this.optimistic.has(row.dataset.uuid);
+
+                row.dataset.sync = stillHere ? 'pending' : 'synced';
             });
 
             const status = this.querySelector('[data-sync-status]');

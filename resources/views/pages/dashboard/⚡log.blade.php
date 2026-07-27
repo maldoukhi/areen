@@ -237,6 +237,8 @@ new class extends Component
             <p class="flex flex-wrap items-center gap-x-3 text-sm text-ink-400">
                 <span>{{ $program->name }}</span>
 
+                <span class="sr-only">{{ __('trainee.log.performed_on') }}</span>
+
                 <time datetime="{{ $this->performedOn }}" class="tabular">
                     {{ \Illuminate\Support\Carbon::parse($this->performedOn)->isoFormat('D MMMM Y') }}
                 </time>
@@ -303,7 +305,11 @@ new class extends Component
                 <div class="fixed inset-x-0 bottom-0 z-40 print:hidden
                             [@media(display-mode:standalone)]:bottom-[calc(60px+env(safe-area-inset-bottom))]">
                     <div class="mx-auto w-full max-w-[520px] px-4">
-                        <div data-rest-panel hidden class="pb-3">
+                        <div data-rest-panel
+                             hidden
+                             role="region"
+                             aria-label="{{ __('trainee.log.rest_panel') }}"
+                             class="pb-3">
                             <x-pwa.rest-timer :seconds="$this->openingRest"/>
                         </div>
                     </div>

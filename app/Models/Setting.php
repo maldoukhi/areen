@@ -120,9 +120,41 @@ class Setting extends Model
                 return null;
             }
 
-            return str_starts_with($this->logo_path, 'brand/')
+            return $this->logoIsShipped()
                 ? asset($this->logo_path)
                 : Storage::disk('public')->url($this->logo_path);
         });
+    }
+
+    /**
+     * Where the logo actually sits on disk, for callers that need the bytes
+     * rather than a URL — printing inlines it as a `data:` URI, because the PDF
+     * renderer has no server to fetch anything from.
+     *
+     * Kept next to the URL accessor on purpose: a logo lives in one of two
+     * places, and resolving that in two files is how the printed header quietly
+     * lost the club's mark once already.
+     */
+    public function logoFilePath(): ?string
+    {
+        if (blank($this->logo_path)) {
+            return null;
+        }
+
+        $path = $this->logoIsShipped()
+            ? public_path($this->logo_path)
+            : Storage::disk('public')->path($this->logo_path);
+
+        return is_file($path) ? $path : null;
+    }
+
+    /**
+     * A logo shipped with the installation is a repository asset served straight
+     * from `public/`; anything else was uploaded through the panel and lives on
+     * the public storage disk.
+     */
+    private function logoIsShipped(): bool
+    {
+        return str_starts_with((string) $this->logo_path, 'brand/');
     }
 }

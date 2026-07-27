@@ -9,8 +9,6 @@ return [
 
     'nav' => [
         'dashboard' => 'My training',
-        'log' => 'Log a session',
-        'progress' => 'Progress',
     ],
 
     'dashboard' => [
@@ -36,7 +34,6 @@ return [
 
     'log' => [
         'title' => 'Log the session',
-        'day_heading' => 'Day :number',
         'performed_on' => 'Session date',
         'set' => 'Set :number',
         'reps' => 'Reps',
@@ -44,15 +41,11 @@ return [
         'weight_with_unit' => 'Weight (:unit)',
         'save' => 'Log the set',
         'logged' => 'Logged',
-        'undo' => 'Undo the set',
         'previous' => 'Last time :reps × :weight',
         'previous_reps_only' => 'Last time :reps reps',
-        'bodyweight' => 'Bodyweight',
-        'sets_done' => ':done of :total sets',
         'day_progress' => 'Session progress',
         'saved_locally' => 'Saved on your phone. It is sent as soon as you are back online.',
         'pending' => 'Waiting to sync',
-        'pending_count' => '{1} 1 set waiting to sync|[2,*] :count sets waiting to sync',
         'all_synced' => 'Everything is synced',
         'sync_now' => 'Send them now',
         'rejected' => 'One set was not accepted. Open the session again to check it.',
@@ -68,13 +61,9 @@ return [
 
     'progress' => [
         'title' => 'Progress',
-        'exercise' => 'Exercise',
         'pick_exercise' => 'Pick an exercise',
         'top_weight' => 'Top weight',
-        'volume' => 'Volume',
-        'volume_unit' => ':unit lifted',
         'sessions' => 'Sessions',
-        'best' => 'Best',
         'chart_weight' => 'Top weight per session',
         'chart_volume' => 'Volume per session',
         'chart_body_weight' => 'Body weight over time',
@@ -102,15 +91,6 @@ return [
         'change' => 'Change since the first measurement',
         'empty_title' => 'Record your first measurement',
         'empty_body' => 'Weigh yourself on the same day each week and the line tells you more than any single number.',
-        'history' => 'Measurement history',
-    ],
-
-    'sync' => [
-        'rejected_reason' => [
-            'forbidden' => 'This exercise is not part of a program on your account.',
-            'owned_by_another' => 'This set belongs to another account.',
-            'invalid' => 'This set could not be read.',
-        ],
     ],
 
 ];

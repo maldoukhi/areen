@@ -31,9 +31,11 @@
      data-uuid="{{ $log?->client_uuid }}"
      data-state="{{ $logged ? 'logged' : 'empty' }}"
      data-sync="{{ $logged ? ($log->isSynced() ? 'synced' : 'pending') : '' }}"
-     class="group grid grid-cols-[2.75rem_1fr_1fr_2.75rem] items-center gap-2 rounded-md border
-            border-ink-700 bg-ink-900 p-2 transition-colors duration-150 ease-out
-            data-[state=logged]:border-success/40">
+     {{ $attributes->class([
+         'group grid grid-cols-[2.75rem_1fr_1fr_2.75rem] items-center gap-2 rounded-md border',
+         'border-ink-700 bg-ink-900 p-2 transition-colors duration-150 ease-out',
+         'data-[state=logged]:border-success/40',
+     ]) }}>
 
     <div class="flex min-h-11 flex-col items-center justify-center gap-1">
         <span class="tabular text-base font-bold leading-none text-ink-300
@@ -53,10 +55,9 @@
                max="999"
                autocomplete="off"
                value="{{ $log?->reps_done }}"
-               placeholder="{{ __('trainee.log.reps') }}"
                class="tabular block min-h-11 w-full rounded-sm border border-ink-700 bg-ink-950 px-2 py-2
                       text-center text-base text-ink-100 transition-colors duration-150 ease-out
-                      placeholder:text-ink-500 focus:border-brand-400">
+                      focus:border-brand-400">
     </label>
 
     <label class="block">
@@ -70,10 +71,9 @@
                max="9999.99"
                autocomplete="off"
                value="{{ $log?->weight }}"
-               placeholder="{{ __('trainee.log.weight') }}"
                class="tabular block min-h-11 w-full rounded-sm border border-ink-700 bg-ink-950 px-2 py-2
                       text-center text-base text-ink-100 transition-colors duration-150 ease-out
-                      placeholder:text-ink-500 focus:border-brand-400">
+                      focus:border-brand-400">
     </label>
 
     {{--
@@ -92,5 +92,16 @@
              stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
             <path d="m5 12.5 4.5 4.5L19 7.5"/>
         </svg>
+
+        <span class="sr-only hidden group-data-[state=logged]:inline">{{ __('trainee.log.logged') }}</span>
     </button>
+
+    {{--
+      The server refused this round and always will — its exercise is not on this
+      account, or its uuid names somebody else's row. Said once, on the row it
+      belongs to, and spanning the full width beneath it.
+    --}}
+    <p class="col-span-4 hidden text-xs leading-normal text-danger group-data-[sync=rejected]:block">
+        {{ __('trainee.log.rejected') }}
+    </p>
 </div>

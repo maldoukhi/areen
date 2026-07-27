@@ -9,8 +9,6 @@ return [
 
     'nav' => [
         'dashboard' => 'تمريني',
-        'log' => 'سجّل جلسة',
-        'progress' => 'تقدّمي',
     ],
 
     'dashboard' => [
@@ -36,7 +34,6 @@ return [
 
     'log' => [
         'title' => 'سجّل الجلسة',
-        'day_heading' => 'اليوم :number',
         'performed_on' => 'تاريخ الجلسة',
         'set' => 'الجولة :number',
         'reps' => 'العدات',
@@ -44,15 +41,11 @@ return [
         'weight_with_unit' => 'الوزن (:unit)',
         'save' => 'سجّل الجولة',
         'logged' => 'سُجّلت',
-        'undo' => 'تراجع عن الجولة',
         'previous' => 'آخر مرة :reps × :weight',
         'previous_reps_only' => 'آخر مرة :reps عدة',
-        'bodyweight' => 'وزن الجسم',
-        'sets_done' => ':done من :total جولات',
         'day_progress' => 'تقدّم الجلسة',
         'saved_locally' => 'حُفظت على جوالك، وتُرسل أول ما يرجع الاتصال.',
         'pending' => 'بانتظار المزامنة',
-        'pending_count' => '{1} جولة بانتظار المزامنة|[2,*] :count جولات بانتظار المزامنة',
         'all_synced' => 'كل شيء متزامن',
         'sync_now' => 'أرسلها الآن',
         'rejected' => 'جولة واحدة لم تُقبل. افتح الجلسة مرة أخرى وراجعها.',
@@ -68,13 +61,9 @@ return [
 
     'progress' => [
         'title' => 'تقدّمي',
-        'exercise' => 'التمرين',
         'pick_exercise' => 'اختر تمرينًا',
         'top_weight' => 'أعلى وزن',
-        'volume' => 'الحِمل',
-        'volume_unit' => ':unit مرفوعة',
         'sessions' => 'الجلسات',
-        'best' => 'الأفضل',
         'chart_weight' => 'أعلى وزن في كل جلسة',
         'chart_volume' => 'الحِمل في كل جلسة',
         'chart_body_weight' => 'وزن الجسم عبر الوقت',
@@ -102,15 +91,6 @@ return [
         'change' => 'الفرق عن أول قياس',
         'empty_title' => 'سجّل أول قياس لك',
         'empty_body' => 'زِن نفسك في اليوم نفسه من كل أسبوع، فالخط يقول أكثر من أي رقم منفرد.',
-        'history' => 'سجل القياسات',
-    ],
-
-    'sync' => [
-        'rejected_reason' => [
-            'forbidden' => 'هذا التمرين ليس ضمن برنامج على حسابك.',
-            'owned_by_another' => 'هذه الجولة تخص حسابًا آخر.',
-            'invalid' => 'تعذّرت قراءة هذه الجولة.',
-        ],
     ],
 
 ];

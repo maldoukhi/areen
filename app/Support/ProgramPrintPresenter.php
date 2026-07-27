@@ -68,19 +68,22 @@ final class ProgramPrintPresenter
      */
     private static function logoDataUri(Setting $setting): ?string
     {
-        $path = $setting->logo_path;
+        // The model owns the question of where a logo lives — a shipped one is a
+        // repository asset, an uploaded one is on the storage disk, and asking
+        // only the disk is how the printed header lost the club's mark.
+        $path = $setting->logoFilePath();
 
-        if (blank($path) || ! Storage::disk('public')->exists($path)) {
+        if ($path === null) {
             return null;
         }
 
-        $contents = Storage::disk('public')->get($path);
+        $contents = @file_get_contents($path);
 
-        if (blank($contents)) {
+        if ($contents === false || $contents === '') {
             return null;
         }
 
-        $mimeType = Storage::disk('public')->mimeType($path) ?: 'image/png';
+        $mimeType = mime_content_type($path) ?: 'image/png';
 
         return 'data:'.$mimeType.';base64,'.base64_encode($contents);
     }

@@ -127,6 +127,18 @@ new class extends Component
                     <p class="mt-3 text-sm leading-relaxed text-ink-300">{{ __('trainee.dashboard.rest_day_note') }}</p>
                 @endif
             @endif
+
+            <p class="mt-3 flex flex-wrap items-baseline gap-x-2 text-sm text-ink-400">
+                <span>{{ __('trainee.dashboard.last_session') }}</span>
+
+                @if ($plan['last_session_on'] === null)
+                    <span class="text-ink-300">{{ __('trainee.dashboard.never_logged') }}</span>
+                @else
+                    <time datetime="{{ $plan['last_session_on']->toDateString() }}" class="tabular text-ink-200">
+                        {{ $plan['last_session_on']->isoFormat('D MMMM') }}
+                    </time>
+                @endif
+            </p>
         </x-ui.card>
 
         {{--
@@ -134,26 +146,31 @@ new class extends Component
           and this is it (DESIGN.md §2): the streak is the only number here that is
           about persistence rather than volume.
         --}}
+        {{--
+          Two tiles across at 360px, three from 640px (DESIGN.md §4). The load
+          figure runs to four digits plus a unit, so on the narrow layout it takes
+          the full width rather than being squeezed into a third of it.
+        --}}
         <section aria-label="{{ __('program.progress.label') }}"
-                 class="mt-6 grid grid-cols-3 gap-3">
-            <x-ui.card class="flex flex-col items-start">
+                 class="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
+            <div class="flex flex-col items-start rounded-lg border border-ink-700 bg-ink-800 p-4">
                 <x-ui.metric :value="$plan['streak']"
                              :caption="__('trainee.dashboard.streak')"
                              tone="ember"/>
-            </x-ui.card>
+            </div>
 
-            <x-ui.card class="flex flex-col items-start">
+            <div class="flex flex-col items-start rounded-lg border border-ink-700 bg-ink-800 p-4">
                 <x-ui.metric :value="$plan['sets_this_week']"
                              :caption="__('trainee.dashboard.sets_this_week')"
                              tone="ink"/>
-            </x-ui.card>
+            </div>
 
-            <x-ui.card class="flex flex-col items-start">
+            <div class="col-span-2 flex flex-col items-start rounded-lg border border-ink-700 bg-ink-800 p-4 sm:col-span-1">
                 <x-ui.metric :value="number_format($plan['volume_this_week'], 0)"
                              :unit="$unit"
                              :caption="__('trainee.dashboard.volume_this_week')"
                              tone="ink"/>
-            </x-ui.card>
+            </div>
         </section>
 
         <section aria-labelledby="recent-heading" class="mt-8">

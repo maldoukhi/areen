@@ -47,4 +47,9 @@
                    underline-offset-4 hover:underline group-data-[pending=true]/sync:inline-flex">
         {{ __('trainee.log.sync_now') }}
     </button>
+
+    {{-- The reassurance, and the only sentence on this bar. --}}
+    <p class="hidden w-full text-xs leading-normal text-ink-400 group-data-[pending=true]/sync:block">
+        {{ __('trainee.log.saved_locally') }}
+    </p>
 </div>
