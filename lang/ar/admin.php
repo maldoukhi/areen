@@ -34,6 +34,12 @@ return [
         'open_builder' => 'افتح بانِي الأيام',
     ],
 
+    'roles' => [
+        'label' => 'الدور',
+        'admin' => 'مدير',
+        'coach' => 'مدرب',
+        'trainee' => 'متدرب',
+    ],
     'entities' => [
         'programs' => 'البرامج',
         'program' => 'برنامج',

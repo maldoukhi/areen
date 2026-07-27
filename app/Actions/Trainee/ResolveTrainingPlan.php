@@ -152,12 +152,21 @@ class ResolveTrainingPlan
         return $streak;
     }
 
+    /**
+     * `performed_on` is a `date` cast, which Eloquent writes through the
+     * connection's datetime format — so SQLite holds `2026-07-27 00:00:00` where
+     * MySQL's DATE column holds `2026-07-27`. A plain `whereBetween` on date
+     * strings would therefore silently drop today's rows on SQLite. `whereDate`
+     * normalises both sides on both drivers, so the window means the same thing
+     * in the test suite as it does on the club's server.
+     */
     private function setsThisWeek(User $user, Carbon $today): int
     {
         return WorkoutLog::query()
             ->forUser($user)
             ->where('is_completed', true)
-            ->whereBetween('performed_on', [$today->copy()->subDays(6)->toDateString(), $today->toDateString()])
+            ->whereDate('performed_on', '>=', $today->copy()->subDays(6)->toDateString())
+            ->whereDate('performed_on', '<=', $today->toDateString())
             ->count();
     }
 
@@ -173,7 +182,8 @@ class ResolveTrainingPlan
             ->where('is_completed', true)
             ->whereNotNull('weight')
             ->whereNotNull('reps_done')
-            ->whereBetween('performed_on', [$today->copy()->subDays(6)->toDateString(), $today->toDateString()])
+            ->whereDate('performed_on', '>=', $today->copy()->subDays(6)->toDateString())
+            ->whereDate('performed_on', '<=', $today->toDateString())
             ->sum(DB::raw('reps_done * weight'));
 
         return round((float) $total, 1);

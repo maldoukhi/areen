@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Models\BodyMetric;
 use App\Models\Exercise;
 use App\Models\MuscleGroup;
 use App\Models\Program;
@@ -11,6 +12,8 @@ use App\Models\ProgramDay;
 use App\Models\ProgramExercise;
 use App\Models\Setting;
 use App\Models\User;
+use App\Models\WorkoutLog;
+use App\Policies\BodyMetricPolicy;
 use App\Policies\ExercisePolicy;
 use App\Policies\MuscleGroupPolicy;
 use App\Policies\ProgramDayPolicy;
@@ -18,11 +21,13 @@ use App\Policies\ProgramExercisePolicy;
 use App\Policies\ProgramPolicy;
 use App\Policies\SettingPolicy;
 use App\Policies\UserPolicy;
+use App\Policies\WorkoutLogPolicy;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Auth\Middleware\Authenticate;
 use Illuminate\Auth\Middleware\RedirectIfAuthenticated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -41,6 +46,8 @@ class AppServiceProvider extends ServiceProvider
         MuscleGroup::class => MuscleGroupPolicy::class,
         User::class => UserPolicy::class,
         Setting::class => SettingPolicy::class,
+        WorkoutLog::class => WorkoutLogPolicy::class,
+        BodyMetric::class => BodyMetricPolicy::class,
     ];
 
     /**
@@ -70,6 +77,23 @@ class AppServiceProvider extends ServiceProvider
         );
 
         $this->pointAuthRedirectsAtTheOneDoor();
+        $this->registerTheTraineeSurface();
+    }
+
+    /**
+     * The trainee's own screens and the endpoint their offline queue drains
+     * into, kept in `routes/trainee.php` so the member surface can be reviewed
+     * apart from the public one and the panel.
+     *
+     * Registered here rather than in `bootstrap/app.php` for the same reason the
+     * auth redirects are: this file already holds the permission map, and the
+     * trainee routes are guarded entirely by policies rather than by a role gate
+     * at the door. The `web` group is what carries the session the sync endpoint
+     * authenticates with — without it the queue would have nobody to belong to.
+     */
+    private function registerTheTraineeSurface(): void
+    {
+        Route::middleware('web')->group(base_path('routes/trainee.php'));
     }
 
     /**

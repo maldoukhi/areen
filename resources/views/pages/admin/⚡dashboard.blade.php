@@ -45,26 +45,26 @@ class extends Component
 <div>
     <x-admin.page-header :title="__('admin.dashboard')" :description="__('admin.dashboard_intro')"/>
 
-    <div class="grid grid-cols-2 gap-3 lg:grid-cols-4">
+    <div class="grid grid-cols-2 gap-3 lg:grid-cols-4" data-reveal>
         <x-ui.card>
-            <x-ui.metric size="lg" :value="$programCount" :caption="__('admin.stats.programs')"/>
+            <x-ui.metric size="lg" :value="$programCount" :caption="__('admin.stats.programs')" count-up/>
         </x-ui.card>
 
         <x-ui.card>
-            <x-ui.metric size="lg" :value="$exerciseCount" :caption="__('admin.stats.exercises')"/>
+            <x-ui.metric size="lg" :value="$exerciseCount" :caption="__('admin.stats.exercises')" count-up/>
         </x-ui.card>
 
         <x-ui.card>
-            <x-ui.metric size="lg" :value="$traineeCount" :caption="__('admin.stats.trainees')"/>
+            <x-ui.metric size="lg" :value="$traineeCount" :caption="__('admin.stats.trainees')" count-up/>
         </x-ui.card>
 
         {{-- The single ember on this screen, per DESIGN.md §2: the number that moves. --}}
         <x-ui.card>
-            <x-ui.metric size="lg" tone="ember" :value="$setsThisWeek" :caption="__('admin.stats.sets_this_week')"/>
+            <x-ui.metric size="lg" tone="ember" :value="$setsThisWeek" :caption="__('admin.stats.sets_this_week')" count-up/>
         </x-ui.card>
     </div>
 
-    <div class="mt-8 grid gap-3 sm:grid-cols-2">
+    <div class="mt-8 grid gap-3 sm:grid-cols-2" data-reveal>
         @can('create', Program::class)
             <x-ui.card :href="route('admin.programs.create')" class="flex items-center gap-3">
                 <x-admin.icon name="plus" class="size-5 shrink-0 text-brand-400"/>

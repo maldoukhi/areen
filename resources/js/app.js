@@ -5,6 +5,10 @@ import { defineUpdateBar } from './pwa/update-bar';
 import { defineWakeLockToggle } from './pwa/wake-lock-toggle';
 import { defineRestTimer } from './pwa/rest-timer';
 import { watchProgramScope } from './pwa/offline-scope';
+import { markScripted, startMotion, watchNavigation } from './motion';
+
+// Set before first paint so a revealed element never flashes in and out.
+markScripted();
 
 registerServiceWorker();
 markDisplayMode();
@@ -25,3 +29,7 @@ defineWakeLockToggle();
 defineRestTimer();
 
 watchProgramScope();
+
+// Reveals and counters for the public pages. The day view opts out entirely.
+document.addEventListener('DOMContentLoaded', () => startMotion());
+watchNavigation();

@@ -4,6 +4,7 @@
     'unit' => null,
     'tone' => 'brand',
     'size' => 'md',
+    'countUp' => false,
 ])
 
 {{--
@@ -34,7 +35,8 @@
 
 <div {{ $attributes->class('flex flex-col gap-1') }}>
     <span class="tabular font-bold leading-none {{ $sizes[$size] ?? $sizes['md'] }} {{ $tones[$tone] ?? $tones['brand'] }}">
-        {{ $value ?? $slot }}@if ($unit)<span class="ms-1 text-sm font-medium text-ink-400">{{ $unit }}</span>@endif
+        {{-- The final value is in the markup, so it is right before any script runs. --}}
+        <span @if ($countUp && is_numeric($value)) data-count-to="{{ (int) $value }}" @endif>{{ $value ?? $slot }}</span>@if ($unit)<span class="ms-1 text-sm font-medium text-ink-400">{{ $unit }}</span>@endif
     </span>
 
     @if ($caption)

@@ -34,6 +34,12 @@ return [
         'open_builder' => 'Open the day builder',
     ],
 
+    'roles' => [
+        'label' => 'Role',
+        'admin' => 'Administrator',
+        'coach' => 'Coach',
+        'trainee' => 'Trainee',
+    ],
     'entities' => [
         'programs' => 'Programs',
         'program' => 'Program',
