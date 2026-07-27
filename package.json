@@ -4,7 +4,8 @@
     "type": "module",
     "scripts": {
         "build": "vite build && node scripts/lift-service-worker.mjs",
-        "dev": "vite"
+        "dev": "vite",
+        "icons": "node scripts/generate-icons.mjs"
     },
     "devDependencies": {
         "@tailwindcss/vite": "^4.0.0",
