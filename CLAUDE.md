@@ -78,6 +78,12 @@
 
 المصدر الوحيد `DESIGN.md`، ومطبَّق في `resources/css/app.css`. لا تخترع لونًا أو نصف قطر خارجه.
 
+**الألوان ثابتة ولا تأتي من `settings`** (قرار المستخدم). `#1A2E34` و `#61B5D1` مشتقّان أصلًا من شعار قسورة، وتباينهما مفحوص — لذلك لا توجد أعمدة ألوان في جدول `settings`، ولا تُضِف واحدة دون طلب صريح.
+
+### الأيقونات
+
+`npm run icons` يولّد كل أحجام PWA من مصدر واحد: شعار النادي `public/brand/logo-qaswarah.png` إن وُجد، وإلا علامة عرين. **أيقونة التطبيق يجب أن تكون أسد قسورة** (قرار المستخدم) — تتحقّق تلقائيًا لحظة وضع الملف وإعادة تشغيل الأمر. المواصفات في `public/brand/README.md`.
+
 - علامة المنصة: `public/brand/areen-mark.svg` + مكوّن `<x-brand.mark/>` (يرث `currentColor`).
 - شعار النادي: من `settings.logo_path` — **لا يُكتب في الكود**.
 - الخط محلي في `public/fonts/` (IBM Plex Sans Arabic، ٨ ملفات woff2، بدون CDN) و `@font-face` في `resources/css/fonts.css`.
@@ -89,7 +95,11 @@
 - `lang/ar/*.php` و `lang/en/*.php` مقسّمة: `common`, `program`, `exercise`, `admin`, `auth`, `pwa`.
 - تعدد اللغة **بالـ session** (لا بادئة `/{locale}/`) — `App\Http\Middleware\SetLocale` مضاف لمجموعة `web`، والتبديل عبر `POST /locale/{locale}`.
 - اللغات المدعومة واتجاهها في `config/areen.php`.
-- حقول المحتوى في DB مزدوجة `_ar` / `_en` مع accessor يرجع حسب `app()->getLocale()` و fallback للعربي.
+- حقول المحتوى في DB مزدوجة `_ar` / `_en` عبر `App\Support\Concerns\HasTranslatableAttributes`: النموذج يعلن `protected array $translatable = ['name', 'description'];` فيصير `$exercise->name` متاحًا.
+  - يتجاوز `getAttribute()` لا `__get`، لأن Blade و `toArray` و `data_get` كلها تمرّ من هناك.
+  - الـ fallback ثابت على `ar` لا على `app.fallback_locale` — لاحقة العمود حرفية (`name_ar`)، وتغيير الإعداد كان سيشير لعمود غير موجود.
+  - النص الفارغ `""` يُعامل كترجمة مفقودة، فتظهر العربية.
+  - **`toArray()` لا يُخرج المفتاح المترجَم** — يُخرج `name_ar`/`name_en` فقط. مهم عند بناء حمولة الأوفلاين في P5: سطّح الاسم يدويًا أو أضف `attributesToArray()`.
 - `<html dir>` و `lang` مشتقّان من اللغة الحالية.
 - `manifest` ديناميكي عبر `ManifestController` على `/manifest.json` ليتبع اللغة — **لا نولّد manifest ثابتًا من Vite** (مصدر واحد للحقيقة).
 
@@ -124,6 +134,17 @@ body_metrics     user_id، measured_on، weight، body_fat، notes
 ```
 
 فهارس على: `programs.slug`, `programs.access_code`, `exercises.slug`, `workout_logs(user_id, performed_on)`.
+
+### مزالق في الطبقة الحالية — اقرأها قبل P4 و P5
+
+- **`settings` بلا أعمدة ألوان** عمدًا — الألوان ثابتة في `DESIGN.md`. الجدول يحوي `tagline_ar/en` و `email` إضافةً لما سبق.
+- **`workout_logs.client_uuid` إلزامي وفريد** ولا يوجد له default في النموذج — المتصفح يولّده قبل الإرسال، والخادم يعمل upsert عليه. أي `create()` بدونه يفشل.
+- **`decimal:N` في Eloquent يرجع نصًا** (`'60.50'`) لا float — حوّل قبل أي حساب في رسوم التقدّم. `body_fat` هو `decimal:1` لأن العمود `decimal(4,1)`.
+- **`program_user.started_at` عمود `date`** فيرجع من الـ pivot كنص خام لا ككائن Carbon.
+- **`program_days.title_*` و `notes_*` و `program_exercises.coach_notes_*` كلها nullable** — بعكس `name_ar` في بقية الجداول. الواجهة يجب أن تحتمل يومًا بلا عنوان.
+- **`User::activeProgram()` دالّة لا علاقة** — نادِها بأقواس؛ `$user->activeProgram` يرمي `LogicException`.
+- **`difficulty` و `level` أعمدة نصية بلا قيد في قاعدة البيانات** — الـ enum cast هو الحارس الوحيد، وأي كتابة خارج Eloquent ستنفجر عند القراءة.
+- النطاقات تستخدم سمة Laravel 13 `#[Scope]` لا بادئة `scopeX` — الاستدعاء نفسه: `Exercise::query()->active()`.
 
 ---
 
