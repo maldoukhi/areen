@@ -62,6 +62,19 @@
     <x-layout.footer/>
     <x-layout.bottom-nav/>
 
+    {{--
+      Both start hidden and stay that way unless their own conditions are met:
+      the update bar only after the service worker reports a replacement waiting,
+      the install banner only outside the installed app and only until it is
+      dismissed. The update bar wins if they ever collide.
+
+      The rest timer and the wake-lock switch are deliberately *not* here — they
+      belong to the day page, which drops in `<x-pwa.rest-timer/>` and
+      `<x-pwa.wake-lock-toggle/>` where they make sense.
+    --}}
+    <x-pwa.update-bar/>
+    <x-pwa.install-banner/>
+
     @livewireScripts
     @stack('scripts')
 </body>

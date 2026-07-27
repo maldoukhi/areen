@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Program;
+use App\Support\ProgramAccess;
 use Livewire\Component;
 
 new class extends Component
@@ -21,6 +22,13 @@ new class extends Component
             ->whereNotNull('access_code')
             ->where('access_code', $accessCode)
             ->firstOrFail();
+
+        /*
+         * Opening this door unlocks the program's day pages for the rest of the
+         * session, so every link from here can carry the slug alone and the code
+         * never has to travel into a href.
+         */
+        ProgramAccess::grant(request(), $this->program);
     }
 };
 ?>

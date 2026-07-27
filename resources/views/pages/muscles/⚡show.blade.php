@@ -81,7 +81,7 @@ new class extends Component
         <ul class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
             @foreach ($this->exercises as $exercise)
                 <li wire:key="exercise-{{ $exercise->getKey() }}" class="flex">
-                    <x-ui.exercise-card :exercise="$exercise" class="w-full"/>
+                    <x-ui.exercise-card :exercise="$exercise" :show-muscle="false" class="w-full"/>
                 </li>
             @endforeach
         </ul>

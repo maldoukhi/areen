@@ -50,9 +50,16 @@ function clockText(milliseconds) {
 
 class RestTimer extends HTMLElement {
     connectedCallback() {
-        this.total = Math.max(5, Number.parseInt(this.dataset.seconds || '90', 10) || 90) * 1000;
+        // `baseTotal` is the rest the coach prescribed; `total` is what is being
+        // counted right now, which the "+" button can grow. Reset goes back to
+        // the prescription, not to whatever was last tapped in.
+        this.baseTotal = Math.max(5, Number.parseInt(this.dataset.seconds || '90', 10) || 90) * 1000;
+        this.total = this.baseTotal;
         this.extendBy = Math.max(5, Number.parseInt(this.dataset.extend || '15', 10) || 15) * 1000;
-        this.storageKey = `${STORAGE_KEY}:${location.pathname}:${this.id || '0'}`;
+
+        // Deliberately not keyed by path: the day tabs are swipeable, and a rest
+        // that started on day 2 is still running when the trainee flicks to day 3.
+        this.storageKey = `${STORAGE_KEY}:${this.id || '0'}`;
 
         this.display = this.querySelector('[data-display]');
         this.ring = this.querySelector('[data-ring]');
@@ -62,6 +69,7 @@ class RestTimer extends HTMLElement {
         this.endsAt = null;
         this.pausedRemaining = null;
         this.finished = false;
+        this.pendingAlert = false;
         this.paintHandle = null;
         this.finishHandle = null;
         this.flashHandle = null;
@@ -77,7 +85,15 @@ class RestTimer extends HTMLElement {
         this.onVisibility = () => {
             // Unlocking the phone lands here. Reconcile against the deadline
             // before anything else gets a chance to repaint a stale number.
-            if (document.visibilityState === 'visible') this.sync();
+            if (document.visibilityState !== 'visible') return;
+
+            this.sync();
+
+            // The rest ran out while the screen was off. `navigator.vibrate` is
+            // specified to do nothing in a hidden document and a suspended audio
+            // context plays to nobody, so the alert is delivered now instead of
+            // having been swallowed.
+            if (this.pendingAlert) this.alert();
         };
 
         this.onPageShow = () => this.sync();
@@ -172,6 +188,7 @@ class RestTimer extends HTMLElement {
         const remaining = this.pausedRemaining ?? this.total;
 
         this.finished = false;
+        this.pendingAlert = false;
         this.pausedRemaining = null;
         this.endsAt = Date.now() + remaining;
 
@@ -199,7 +216,10 @@ class RestTimer extends HTMLElement {
 
         this.stopClocks();
         dropWakeLock(this);
-        this.persist();
+        // A paused rest is not a deadline, so there is nothing worth carrying
+        // across a reload — and a stale pause must not override the next
+        // exercise's own rest when the day view mounts a fresh timer.
+        clearSession(this.storageKey);
         this.paint();
     }
 
@@ -212,7 +232,6 @@ class RestTimer extends HTMLElement {
         } else if (this.pausedRemaining !== null) {
             this.pausedRemaining += this.extendBy;
             this.total += this.extendBy;
-            this.persist();
         } else {
             this.total += this.extendBy;
         }
@@ -227,6 +246,8 @@ class RestTimer extends HTMLElement {
         this.endsAt = null;
         this.pausedRemaining = null;
         this.finished = false;
+        this.pendingAlert = false;
+        this.total = this.baseTotal;
 
         this.stopClocks();
         dropWakeLock(this);
@@ -247,9 +268,7 @@ class RestTimer extends HTMLElement {
         dropWakeLock(this);
         clearSession(this.storageKey);
 
-        buzz();
-        chime();
-        this.flash();
+        this.alert();
         this.paint();
 
         /*
@@ -259,21 +278,28 @@ class RestTimer extends HTMLElement {
         this.emit('areen:rest-finished', {});
     }
 
+    /**
+     * Buzz, tone, one flash. Tried even on a dark screen — a locked phone may
+     * still play audio — but remembered as owed if the document is hidden, so
+     * the trainee is told either way and never twice.
+     */
+    alert() {
+        this.pendingAlert = document.visibilityState !== 'visible';
+
+        buzz();
+        chime();
+        this.flash();
+    }
+
     emit(name, detail) {
         this.dispatchEvent(new CustomEvent(name, { detail, bubbles: true }));
     }
 
     /* ---------------------------------------------------------- persistence */
 
+    /** Only a live deadline is ever written. See `pause()` for why. */
     persist() {
-        writeSession(
-            this.storageKey,
-            JSON.stringify({
-                endsAt: this.endsAt,
-                pausedRemaining: this.pausedRemaining,
-                total: this.total,
-            }),
-        );
+        writeSession(this.storageKey, JSON.stringify({ endsAt: this.endsAt, total: this.total }));
     }
 
     restore() {
@@ -290,15 +316,15 @@ class RestTimer extends HTMLElement {
             return;
         }
 
-        if (Number.isFinite(saved?.total)) this.total = saved.total;
-
-        if (Number.isFinite(saved?.pausedRemaining)) {
-            this.pausedRemaining = saved.pausedRemaining;
+        if (! Number.isFinite(saved?.endsAt)) {
+            clearSession(this.storageKey);
 
             return;
         }
 
-        if (! Number.isFinite(saved?.endsAt)) return;
+        // The ring is drawn against the rest that was actually started, which
+        // may have been extended since.
+        if (Number.isFinite(saved.total)) this.total = saved.total;
 
         if (saved.endsAt <= Date.now()) {
             // The rest ran out while the page was gone. Say so rather than
@@ -341,14 +367,31 @@ class RestTimer extends HTMLElement {
             this.ring.style.strokeDashoffset = String(RING_LENGTH * (1 - span));
         }
 
-        const state = this.running ? 'running' : this.finished ? 'finished' : this.pausedRemaining !== null ? 'paused' : 'idle';
+        let state = 'idle';
+
+        if (this.running) {
+            state = 'running';
+        } else if (this.finished) {
+            state = 'finished';
+        } else if (this.pausedRemaining !== null) {
+            state = 'paused';
+        }
 
         this.dataset.state = state;
+
+        // Only one of the three button labels is ever visible.
+        let label = 'start';
+
+        if (state === 'running') {
+            label = 'pause';
+        } else if (state === 'paused') {
+            label = 'resume';
+        }
 
         if (this.doneNote) this.doneNote.hidden = state !== 'finished';
 
         this.querySelectorAll('[data-label]').forEach((node) => {
-            node.hidden = node.dataset.label !== (state === 'running' ? 'pause' : state === 'paused' ? 'resume' : 'start');
+            node.hidden = node.dataset.label !== label;
         });
 
         if (this.toggleButton) {

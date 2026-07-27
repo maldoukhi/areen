@@ -15,10 +15,6 @@ function audioContextClass() {
     return window.AudioContext || window.webkitAudioContext || null;
 }
 
-export function audioSupported() {
-    return audioContextClass() !== null;
-}
-
 /**
  * Build (or wake) the audio context. Must be called from inside a user gesture:
  * every mobile browser starts contexts suspended, and one created outside a tap

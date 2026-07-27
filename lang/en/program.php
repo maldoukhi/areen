@@ -49,6 +49,8 @@ return [
         'rest' => 'Rest day',
         'rest_title' => 'Today is a rest day',
         'rest_body' => 'Take the day off. Sleep well, drink enough water, and come back stronger tomorrow.',
+        'none_title' => 'This plan is being put together',
+        'none_body' => 'The days show up here as soon as they are published. Browse the other programs meanwhile.',
         'empty_title' => 'Build this day',
         'empty_body' => 'Add the first exercise and it shows up in the day right away.',
         'next' => 'Next day',

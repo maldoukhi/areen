@@ -159,7 +159,8 @@ new class extends Component
 
 <div @class([
     'mx-auto w-full max-w-[1200px] px-4 pt-5',
-    'pb-[calc(112px+env(safe-area-inset-bottom))]' => ! $this->currentDay->is_rest_day && $this->blocks !== [],
+    // Clearance for the fixed bar, so the last exercise is never trapped under it.
+    'pb-[calc(136px+env(safe-area-inset-bottom))]' => ! $this->currentDay->is_rest_day && $this->blocks !== [],
     'pb-12' => $this->currentDay->is_rest_day || $this->blocks === [],
 ])>
 
@@ -244,6 +245,11 @@ new class extends Component
                  const dx = event.clientX - this.startX
                  const dy = event.clientY - this.startY
 
+                 // Let the gesture declare itself before locking an axis. The first
+                 // pixel of a horizontal swipe is nearly always vertical noise, and
+                 // deciding on it would cancel almost every real swipe.
+                 if (Math.abs(dx) < 12 && Math.abs(dy) < 12) return
+
                  if (Math.abs(dy) > Math.abs(dx)) return this.cancel()
 
                  this.dx = dx
@@ -275,7 +281,6 @@ new class extends Component
          x-on:pointermove="move($event)"
          x-on:pointerup="finish($event)"
          x-on:pointercancel="cancel()"
-         x-on:pointerleave="cancel()"
          x-bind:style="tracking && ! reduced
              ? 'transform: translateX(' + Math.max(-24, Math.min(24, dx * 0.2)) + 'px)'
              : ''"

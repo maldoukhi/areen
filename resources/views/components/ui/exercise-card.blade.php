@@ -1,4 +1,4 @@
-@props(['exercise'])
+@props(['exercise', 'showMuscle' => true])
 
 {{--
   One exercise in a listing grid. Shared by /exercises and /muscles/{slug} so the
@@ -50,7 +50,11 @@
 
     <h3 class="text-lg font-semibold leading-snug text-ink-50">{{ $exercise->name }}</h3>
 
-    <p class="text-sm leading-normal text-ink-300">{{ $exercise->muscleGroup->name }}</p>
+    {{-- On /muscles/{slug} every card names the same group, so the page turns
+         this line off rather than repeating itself down the grid. --}}
+    @if ($showMuscle)
+        <p class="text-sm leading-normal text-ink-300">{{ $exercise->muscleGroup->name }}</p>
+    @endif
 
     @if ($meta !== [])
         <p class="mt-auto text-xs leading-normal text-ink-400">{{ implode(' · ', $meta) }}</p>

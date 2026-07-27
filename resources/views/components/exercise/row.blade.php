@@ -52,11 +52,17 @@
         <div class="flex min-w-0 flex-1 items-start justify-between gap-3">
             <h3 class="min-w-0 text-base font-semibold leading-snug text-ink-50">
                 @if ($exercise)
+                    {{--
+                      The padding buys the link a 44px tall target on a single-line
+                      name; the matching negative margin gives the space straight
+                      back, so the name still sits level with the badge beside it.
+                    --}}
                     <a href="{{ route('exercises.show', $exercise) }}"
                        wire:navigate
-                       class="rounded-sm underline-offset-4 hover:underline">{{ $exercise->name }}</a>
+                       class="-my-2.5 block rounded-sm py-2.5 underline-offset-4 hover:underline">{{ $exercise->name }}</a>
                 @else
-                    {{ $prescription }}
+                    {{-- The exercise was soft-deleted out from under the program. --}}
+                    {{ __('exercise.singular') }}
                 @endif
             </h3>
 

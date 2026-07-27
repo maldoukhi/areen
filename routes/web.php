@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\ManifestController;
+use App\Http\Middleware\EnsureProgramIsViewable;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,8 +15,18 @@ use Illuminate\Support\Facades\Route;
 Route::livewire('/', 'pages::home')->name('home');
 
 Route::livewire('/programs', 'pages::programs.index')->name('programs.index');
-Route::livewire('/programs/{program}', 'pages::programs.show')->name('programs.show');
-Route::livewire('/programs/{program}/day/{day}', 'pages::programs.day')->name('programs.day');
+
+/*
+ * The guard sits on the route, not inside the pages. The overview and the day
+ * view are separate components, and gating only the overview left a private
+ * program's whole schedule readable at `/programs/{slug}/day/{n}` to anyone who
+ * guessed the slug — which defeats the access code. On the route, a page added
+ * later cannot forget it.
+ */
+Route::middleware(EnsureProgramIsViewable::class)->group(function (): void {
+    Route::livewire('/programs/{program}', 'pages::programs.show')->name('programs.show');
+    Route::livewire('/programs/{program}/day/{day}', 'pages::programs.day')->name('programs.day');
+});
 
 Route::livewire('/exercises', 'pages::exercises.index')->name('exercises.index');
 Route::livewire('/exercises/{exercise}', 'pages::exercises.show')->name('exercises.show');

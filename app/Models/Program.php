@@ -75,6 +75,18 @@ class Program extends Model
             ->where('published_at', '<=', now());
     }
 
+    /**
+     * The in-memory twin of the `published` scope, for when the program is
+     * already loaded and a second query would be wasteful. Change one and you
+     * must change the other.
+     */
+    public function isPublished(): bool
+    {
+        return $this->is_public
+            && $this->published_at !== null
+            && $this->published_at->lessThanOrEqualTo(now());
+    }
+
     #[Scope]
     protected function featured(Builder $query): void
     {

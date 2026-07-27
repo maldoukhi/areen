@@ -112,3 +112,24 @@
 @utility tabular {
     font-variant-numeric: tabular-nums;
 }
+
+/*
+ | End of rest: one flash of the bar, never a modal (DESIGN.md §11). The element
+ | sets `data-flash` on itself for the length of the animation. The global
+ | `prefers-reduced-motion` rule above collapses the duration, so the state still
+ | changes and the movement does not.
+ */
+@keyframes areen-rest-flash {
+    0%,
+    100% {
+        background-color: var(--color-ink-800);
+    }
+
+    30% {
+        background-color: color-mix(in oklab, var(--color-ember) 30%, var(--color-ink-800));
+    }
+}
+
+areen-rest-timer[data-flash='true'] {
+    animation: areen-rest-flash 900ms ease-out 1;
+}

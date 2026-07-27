@@ -16,6 +16,7 @@ return [
     'update' => [
         'body' => 'An update for Areen is ready.',
         'action' => 'Reload',
+        'applying' => 'Updating',
     ],
 
     'offline' => [
@@ -28,6 +29,17 @@ return [
 
     'wake_lock' => [
         'label' => 'Keep the screen awake',
+    ],
+
+    'rest' => [
+        'label' => 'Rest timer',
+        'start' => 'Start the rest',
+        'pause' => 'Pause the timer',
+        'resume' => 'Resume the rest',
+        'reset' => 'Reset the timer',
+        'extend' => 'Add :seconds seconds',
+        'remaining' => 'Rest remaining',
+        'done' => 'Rest is over',
     ],
 
 ];
