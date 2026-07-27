@@ -199,6 +199,44 @@ return [
         'muscle_groups_body' => 'Add a muscle group and it becomes a ready filter in the exercise library.',
         'trainees_title' => 'Add the first trainee',
         'trainees_body' => 'Create an account for the trainee and assign their program so they can start logging sets.',
+        'day_title' => 'Build this day',
+        'day_body' => 'Add the first exercise from the library, then drag the rows into the order you want.',
+        'results_title' => 'Widen the search a little',
+        'results_body' => 'Nothing matches that. Clear the search or change the filter.',
     ],
+
+    'shell' => [
+        'menu' => 'Menu',
+        'open_menu' => 'Open the menu',
+        'close_menu' => 'Close the menu',
+        'signed_in_as' => 'Signed in as',
+        'public_site' => 'Go to the site',
+        'sections' => 'Panel sections',
+    ],
+
+    'filters' => [
+        'label' => 'Filters',
+        'all' => 'All',
+        'all_levels' => 'All levels',
+        'all_muscles' => 'All muscles',
+        'all_visibility' => 'All visibility',
+        'all_roles' => 'All roles',
+        'all_status' => 'All statuses',
+        'reset' => 'Reset',
+    ],
+
+    'day' => [
+        'builder' => 'Day builder',
+        'reorder_hint' => 'Drag an exercise by its handle to move it. The order saves straight away.',
+        'drag_handle' => 'Drag to reorder',
+        'pick_title' => 'Pick from the library',
+        'pick_hint' => 'Find an exercise and add it to this day.',
+        'rest_notice' => 'This day is marked as rest, so the trainee sees no exercises on it.',
+        'position' => 'Position :number',
+        'settings' => 'Day details',
+        'exercises' => "The day's exercises",
+    ],
+
+    'dashboard_intro' => 'A quick look at the club today.',
 
 ];
