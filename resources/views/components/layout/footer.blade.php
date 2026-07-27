@@ -23,9 +23,11 @@
 
     $locale = app()->getLocale();
 
-    $clubName = $value('club_name_'.$locale) ?: $value('club_name_ar') ?: $value('club_name') ?: __('common.app_name');
-    $address = $value('address_'.$locale) ?: $value('address_ar');
-    $city = $value('city_'.$locale) ?: $value('city_ar');
+    // `club_name`, `address` and `city` are the model's locale-aware accessors;
+    // the raw columns are the fallback for as long as they may not be there yet.
+    $clubName = $value('club_name') ?: $value('club_name_'.$locale) ?: $value('club_name_ar') ?: __('common.app_name');
+    $address = $value('address') ?: $value('address_'.$locale) ?: $value('address_ar');
+    $city = $value('city') ?: $value('city_'.$locale) ?: $value('city_ar');
     // A middle dot reads the same in both directions, so no punctuation is
     // hardcoded for one script.
     $addressLine = implode(' · ', array_filter([$address, $city]));

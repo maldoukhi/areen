@@ -54,7 +54,6 @@ return [
 
     'states' => [
         'loading' => 'Loading',
-        'empty_title' => 'Nothing here yet',
         'error_title' => 'That did not go through',
         'error_body' => 'Something unexpected happened. Try again in a moment.',
         'not_found_title' => 'Page not found',

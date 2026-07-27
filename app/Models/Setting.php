@@ -8,6 +8,7 @@ use App\Support\Concerns\HasTranslatableAttributes;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 
@@ -61,15 +62,34 @@ class Setting extends Model
     ];
 
     /**
-     * Never null, so a fresh install renders instead of failing; the empty
-     * instance is cached too and dropped the moment the row is written.
+     * Never null, so a fresh install renders instead of failing.
+     *
+     * The cache holds the raw attribute array rather than the model. A
+     * serializing store (file, database, redis) hands a cached Eloquent
+     * instance back as `__PHP_Incomplete_Class` whenever it is unserialized
+     * before the class is loaded, which turned the club's identity into a
+     * fatal on any page that touched it. An array survives every driver.
      */
     public static function current(): self
     {
-        return static::$current ??= Cache::rememberForever(
+        if (static::$current instanceof self) {
+            return static::$current;
+        }
+
+        $attributes = Cache::rememberForever(
             self::CACHE_KEY,
-            fn (): self => static::query()->first() ?? new self,
+            fn (): array => static::query()->first()?->attributesToArray() ?? [],
         );
+
+        $setting = new self;
+
+        if (is_array($attributes) && $attributes !== []) {
+            // `logo_url` is appended, not a column, so it must not be rehydrated.
+            $setting->forceFill(Arr::except($attributes, $setting->getAppends()));
+            $setting->exists = true;
+        }
+
+        return static::$current = $setting;
     }
 
     public static function forget(): void

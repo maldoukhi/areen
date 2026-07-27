@@ -23,9 +23,11 @@
     // accessor must never take the whole shell down.
     $value = fn (string $key) => rescue(fn () => $settings?->{$key}, null, false);
 
-    $clubName = $value('club_name_'.app()->getLocale())
+    // `club_name` is the model's locale-aware accessor; the raw columns are the
+    // fallback for as long as that accessor may not be there yet.
+    $clubName = $value('club_name')
+        ?: $value('club_name_'.app()->getLocale())
         ?: $value('club_name_ar')
-        ?: $value('club_name')
         ?: __('common.app_name');
 
     $logo = $value('logo_url');
