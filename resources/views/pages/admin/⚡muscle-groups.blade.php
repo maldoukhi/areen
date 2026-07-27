@@ -209,10 +209,16 @@ class extends Component
 
                                 <button type="button"
                                         wire:sort:handle
-                                        aria-label="{{ __('admin.day.drag_handle') }}"
+                                        aria-hidden="true"
+                                        tabindex="-1"
                                         class="inline-flex size-11 shrink-0 cursor-grab items-center justify-center rounded-sm text-ink-300 hover:bg-ink-700">
                                     <x-admin.icon name="grip" class="size-5"/>
                                 </button>
+
+                                {{-- The keyboard's route through the same reorder. --}}
+                                <x-admin.reorder-keys :item="$group->id"
+                                                      :index="$index"
+                                                      :count="$this->groups->count()"/>
 
                                 <span class="inline-flex size-8 shrink-0 items-center justify-center rounded-sm bg-ink-900 tabular text-sm font-bold text-ink-300">
                                     {{ $index + 1 }}

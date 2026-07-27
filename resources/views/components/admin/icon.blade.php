@@ -80,6 +80,19 @@
                 <circle cx="15" cy="19" r="1"/>
                 @break
 
+            {{--
+              The keyboard's half of a sortable list. `grip` above is a pointer
+              affordance and nothing more, so these two carry the same move for
+              anyone who cannot press and drag. See <x-admin.reorder-keys>.
+            --}}
+            @case('chevron-up')
+                <path d="m18 15-6-6-6 6"/>
+                @break
+
+            @case('chevron-down')
+                <path d="m6 9 6 6 6-6"/>
+                @break
+
             @case('copy')
                 <rect width="14" height="14" x="8" y="8" rx="2"/>
                 <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>

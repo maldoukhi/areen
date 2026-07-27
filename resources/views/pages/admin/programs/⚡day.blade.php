@@ -401,10 +401,22 @@ class extends Component
                                     <div class="flex items-start gap-2">
                                         <button type="button"
                                                 wire:sort:handle
-                                                aria-label="{{ __('admin.day.drag_handle') }}"
+                                                aria-hidden="true"
+                                                tabindex="-1"
                                                 class="inline-flex size-11 shrink-0 cursor-grab items-center justify-center rounded-sm text-ink-300 hover:bg-ink-700">
                                             <x-admin.icon name="grip" class="size-5"/>
                                         </button>
+
+                                        {{--
+                                          The same move, reachable from the keyboard. The grip
+                                          beside it is a pointer gesture only, so it is taken out
+                                          of the tab order and hidden from assistive technology
+                                          rather than left to look like a control that does
+                                          nothing when it is focused and pressed.
+                                        --}}
+                                        <x-admin.reorder-keys :item="$programExercise->id"
+                                                              :index="$index"
+                                                              :count="$this->rows->count()"/>
 
                                         <span class="mt-2 inline-flex size-8 shrink-0 items-center justify-center rounded-sm bg-ink-900 tabular text-sm font-bold text-ink-300">
                                             {{ $index + 1 }}

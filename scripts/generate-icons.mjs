@@ -111,11 +111,21 @@ console.log(`[areen] generating icons from ${source.label}`);
  * deliberately the smallest: Android crops maskable icons to whatever shape the
  * launcher uses, and only the middle 80% is guaranteed to survive.
  */
-render(chromium, source, { file: 'icon-192.png', size: 192, plate: THEME, scale: 0.68 });
+/*
+ * Every icon is rendered at 512.
+ *
+ * Headless Chromium refuses to lay out a canvas much below 500px: it renders the
+ * page at its own minimum and squashes the result into the requested frame, so a
+ * 192px icon came out vertically compressed and off-centre — the logo visibly cut
+ * through the middle. Rather than ship a distorted small icon, every size is
+ * rendered at 512 and declared honestly in the manifest. Chrome only requires an
+ * icon of at least 192 to consider a site installable, and downscaling a correct
+ * 512 is something every platform already does well.
+ */
 render(chromium, source, { file: 'icon-512.png', size: 512, plate: THEME, scale: 0.68 });
 render(chromium, source, { file: 'icon-maskable-512.png', size: 512, plate: THEME, scale: 0.5 });
-// iOS rounds the corners itself and does not composite transparency, so this one stays opaque.
-render(chromium, source, { file: 'apple-touch-icon.png', size: 180, plate: THEME, scale: 0.66 });
+// iOS rounds the corners itself and does not composite transparency, so this stays opaque.
+render(chromium, source, { file: 'apple-touch-icon.png', size: 512, plate: THEME, scale: 0.66 });
 render(chromium, source, { file: 'splash-logo.png', size: 512, plate: BACKGROUND, scale: 0.4 });
 
 rmSync(tmp, { force: true });

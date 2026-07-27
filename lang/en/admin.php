@@ -233,7 +233,7 @@ return [
 
     'day' => [
         'builder' => 'Day builder',
-        'reorder_hint' => 'Drag an exercise by its handle to move it. The order saves straight away.',
+        'reorder_hint' => 'Drag by the handle, or use the up and down arrows. The order saves straight away.',
         'drag_handle' => 'Drag to reorder',
         'pick_title' => 'Pick from the library',
         'pick_hint' => 'Find an exercise and add it to this day.',
