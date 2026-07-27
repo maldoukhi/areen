@@ -41,6 +41,7 @@ return [
         'label' => 'الأيام',
         'count' => ':count أيام في الأسبوع',
         'number' => 'اليوم :number',
+        'total' => '{0} بلا أيام|{1} يوم واحد|{2} يومان|[3,10] :count أيام|[11,*] :count يومًا',
         'title' => 'يوم :number · :title',
         'focus' => 'التركيز',
         'notes' => 'ملاحظات اليوم',

@@ -41,6 +41,7 @@ return [
         'label' => 'Days',
         'count' => ':count days a week',
         'number' => 'Day :number',
+        'total' => '{0} No days|{1} 1 day|[2,*] :count days',
         'title' => 'Day :number · :title',
         'focus' => 'Focus',
         'notes' => 'Notes for the day',

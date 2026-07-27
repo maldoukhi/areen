@@ -73,6 +73,25 @@
             <path d="M2 12h20"/>
             @break
 
+        @case('clock')
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 6v6l4 2"/>
+            @break
+
+        @case('play')
+            <path d="M6.5 4.5 19 12 6.5 19.5Z"/>
+            @break
+
+        @case('moon')
+            <path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"/>
+            @break
+
+        @case('link')
+            <path d="M9 17H7A5 5 0 0 1 7 7h2"/>
+            <path d="M15 7h2a5 5 0 1 1 0 10h-2"/>
+            <path d="M8 12h8"/>
+            @break
+
         @case('wifi-off')
             <path d="M12 20h.01"/>
             <path d="M8.5 16.429a5 5 0 0 1 7 0"/>
