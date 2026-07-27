@@ -100,8 +100,18 @@ jobs:
 
       - name: Assert the worker still refuses to cache any write
         run: |
-          rg -q 'NetworkOnly' public/sw.js || {
-            echo '::error::The NetworkOnly rule covering Livewire and every POST is gone from the built worker.'
+          # The same rule that bypasses Livewire also bypasses every non-GET, and
+          # it is matched here on the method guard rather than on the strategy's
+          # class name: the worker is minified, so "NetworkOnly" does not survive
+          # into the built file and asserting on it would pass by never matching.
+          rg -qF '"GET"!==' public/sw.js || {
+            echo '::error::The non-GET bypass is gone from the built worker; a POST could be served from cache.'
+            exit 1
+          }
+          # And the runtime caches are still wired, so the file is a real worker
+          # and not an empty shell that happens to contain the right words.
+          rg -qF 'areen-pages' public/sw.js || {
+            echo '::error::The page cache is missing from the built worker.'
             exit 1
           }
           echo 'WRITES-NEVER-CACHED'
