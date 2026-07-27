@@ -49,6 +49,21 @@ final class PdfRenderer
     }
 
     /**
+     * The resolved Chromium binary, or null when there is none.
+     *
+     * Exposed because {@see OpenGraphImage} drives the same
+     * browser to screenshot the share card. Only the *lookup* is shared: the
+     * two callers pass very different flags — `--print-to-pdf` against a paper
+     * size versus `--screenshot` against a fixed viewport — so folding the
+     * screenshot into this class would have meant one method with two modes
+     * and a name that fits neither.
+     */
+    public static function binary(): ?string
+    {
+        return self::binaryPath();
+    }
+
+    /**
      * Renders `$html` to a PDF and returns the raw bytes, or null if no
      * Chromium binary is available or the render failed. The HTML is
      * expected to be fully self-contained (inline CSS, inline images) —

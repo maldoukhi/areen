@@ -26,7 +26,7 @@
                         aria-label="{{ __('common.locale.switch') }}"
                         class="inline-flex min-h-11 min-w-11 items-center justify-center gap-1.5 rounded-sm px-3
                                text-sm font-medium text-ink-200 transition-colors duration-150 ease-out hover:bg-ink-800">
-                    <x-ui.icon name="globe" class="size-5 shrink-0 text-ink-400"/>
+                    <x-ui.icon name="globe" class="size-5 shrink-0 text-ink-300"/>
                     <span>{{ $locale['name'] ?? $code }}</span>
                 </button>
             </form>

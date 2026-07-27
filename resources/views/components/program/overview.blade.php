@@ -97,7 +97,7 @@
                                 'flex size-11 shrink-0 items-center justify-center rounded-md bg-ink-950',
                                 'tabular text-xl font-bold leading-none',
                                 'text-brand-400' => ! $day->is_rest_day,
-                                'text-ink-400' => $day->is_rest_day,
+                                'text-ink-300' => $day->is_rest_day,
                             ])>{{ $day->day_number }}</span>
 
                             <span class="flex min-w-0 flex-1 flex-col gap-0.5">
@@ -108,7 +108,7 @@
                                 ])>{{ $dayTitle }}</span>
 
                                 @if ($dayMeta !== [])
-                                    <span class="tabular truncate text-sm leading-normal text-ink-400">
+                                    <span class="tabular truncate text-sm leading-normal text-ink-300">
                                         {{ implode(' · ', $dayMeta) }}
                                     </span>
                                 @endif

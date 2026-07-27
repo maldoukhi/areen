@@ -1,6 +1,9 @@
 @props([
     'settings' => null,
-    'height' => 'h-10',
+    // How the image is sized. A caller that needs different geometry — the hero
+    // crest fills its box rather than sitting in a 40px header row — replaces
+    // this wholesale instead of fighting a hardcoded cap.
+    'size' => 'h-10 w-auto max-w-[104px] object-contain',
     'markClass' => 'size-8 shrink-0 text-brand-400',
 ])
 
@@ -36,8 +39,7 @@
 @endphp
 
 @if ($logo)
-    <img src="{{ $logo }}" alt=""
-         {{ $attributes->class([$height, 'w-auto max-w-[104px] object-contain']) }}>
+    <img src="{{ $logo }}" alt="" {{ $attributes->class($size) }}>
 @else
     <x-brand.mark {{ $attributes->class($markClass) }}/>
 @endif

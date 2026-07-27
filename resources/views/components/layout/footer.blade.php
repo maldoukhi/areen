@@ -67,7 +67,7 @@
 
         @if ($links)
             <div class="flex flex-col gap-2">
-                <h2 class="text-xs font-medium text-ink-400">{{ __('common.footer.contact') }}</h2>
+                <h2 class="text-xs font-medium text-ink-300">{{ __('common.footer.contact') }}</h2>
 
                 <ul class="flex flex-wrap gap-x-2 gap-y-1">
                     @foreach ($links as $link)
@@ -86,7 +86,7 @@
             </div>
         @endif
 
-        <p class="text-xs text-ink-500">
+        <p class="text-xs text-ink-300">
             {{ __('common.footer.powered_by', ['name' => __('common.app_name')]) }}
         </p>
     </div>

@@ -210,7 +210,7 @@ class extends Component
                                 <button type="button"
                                         wire:sort:handle
                                         aria-label="{{ __('admin.day.drag_handle') }}"
-                                        class="inline-flex size-11 shrink-0 cursor-grab items-center justify-center rounded-sm text-ink-400 hover:bg-ink-700">
+                                        class="inline-flex size-11 shrink-0 cursor-grab items-center justify-center rounded-sm text-ink-300 hover:bg-ink-700">
                                     <x-admin.icon name="grip" class="size-5"/>
                                 </button>
 
@@ -220,10 +220,10 @@ class extends Component
 
                                 <div class="min-w-0 flex-1">
                                     <p class="truncate font-medium text-ink-100">{{ $group->name }}</p>
-                                    <p class="truncate text-xs text-ink-400" dir="ltr">{{ $group->slug }}</p>
+                                    <p class="truncate text-xs text-ink-300" dir="ltr">{{ $group->slug }}</p>
                                 </div>
 
-                                <span class="shrink-0 tabular text-xs text-ink-400">
+                                <span class="shrink-0 tabular text-xs text-ink-300">
                                     {{ __('exercise.muscle.exercises_count', ['count' => $group->exercises_count]) }}
                                 </span>
 

@@ -79,6 +79,20 @@ class AppServiceProvider extends ServiceProvider
         $this->pointAuthRedirectsAtTheOneDoor();
         $this->registerTheTraineeSurface();
         $this->registerThePrintSurface();
+        $this->registerTheDiscoverySurface();
+    }
+
+    /**
+     * `robots.txt`, the sitemap and the Open Graph card, kept in `routes/seo.php`.
+     *
+     * Registered here rather than in `bootstrap/app.php` for the same reason the
+     * trainee and print surfaces are: this file is already where the route map
+     * is assembled. The `web` group matters — `SetLocale` runs there, and the
+     * sitemap and the share card are both rendered in the reader's language.
+     */
+    private function registerTheDiscoverySurface(): void
+    {
+        Route::middleware('web')->group(base_path('routes/seo.php'));
     }
 
     /**

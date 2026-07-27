@@ -41,7 +41,7 @@
     data-extend="{{ $extend }}"
     data-state="idle"
     {{ $attributes->class('block rounded-lg border border-ink-700 bg-ink-800 p-5') }}>
-    <p class="flex items-center justify-center gap-2 text-xs font-medium text-ink-400">
+    <p class="flex items-center justify-center gap-2 text-xs font-medium text-ink-300">
         <svg class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
              stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
             <circle cx="12" cy="13" r="8"/>

@@ -3,6 +3,7 @@
 use App\Models\Exercise;
 use App\Models\MuscleGroup;
 use App\Models\Program;
+use App\Models\Setting;
 use Livewire\Component;
 
 new class extends Component
@@ -14,10 +15,19 @@ new class extends Component
             'programs' => Program::query()->published()->ordered()->take(4)->get(),
             'muscles' => MuscleGroup::query()->ordered()->withCount('exercises')->get(),
             'exerciseCount' => Exercise::query()->active()->count(),
+            // The club's own name leads the document title. A search result that
+            // says only "عرين" tells a visitor nothing about which gym this is.
+            'club' => Setting::current(),
         ];
     }
 };
 ?>
+
+@section('title', ($club->club_name ?: __('common.app_name')).' · '.($club->tagline ?: __('common.tagline')))
+
+@push('head')
+    <x-seo.page :description="__('common.seo.home')"/>
+@endpush
 
 <div class="pb-16 safe-pb">
     {{--
@@ -30,6 +40,8 @@ new class extends Component
     --}}
     @if ($featured)
         <section class="relative overflow-hidden border-b border-ink-800 hero-glow">
+            <div class="grid-weave pointer-events-none absolute inset-0" aria-hidden="true"></div>
+
             <div class="relative mx-auto grid max-w-[1200px] gap-10 px-4 pb-14 pt-10
                         lg:grid-cols-[minmax(0,1fr)_360px] lg:items-center lg:gap-16 lg:pb-20 lg:pt-16">
                 <div>
@@ -70,7 +82,7 @@ new class extends Component
                 </div>
 
                 {{-- Decorative, and the first thing to go when the screen is narrow. --}}
-                <x-ui.arena class="mx-auto hidden w-full max-w-[360px] lg:block" data-reveal/>
+                <x-ui.arena class="mx-auto hidden w-full max-w-[340px] lg:block" data-reveal/>
             </div>
         </section>
     @else
@@ -98,14 +110,7 @@ new class extends Component
 
             <div class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                 @foreach ($programs as $program)
-                    <x-ui.card :href="route('programs.show', $program)" wire:key="program-{{ $program->id }}" wire:navigate data-reveal>
-                        <h3 class="text-lg font-semibold text-ink-50">{{ $program->name }}</h3>
-
-                        <div class="mt-3 flex flex-wrap items-center gap-2">
-                            <x-ui.chip>{{ __('program.level.'.$program->level->value) }}</x-ui.chip>
-                            <x-ui.chip>{{ trans_choice('program.days.total', $program->days_count, ['count' => $program->days_count]) }}</x-ui.chip>
-                        </div>
-                    </x-ui.card>
+                    <x-program.card :program="$program" wire:key="program-{{ $program->id }}" data-reveal/>
                 @endforeach
             </div>
         </section>
@@ -127,7 +132,7 @@ new class extends Component
                 @foreach ($muscles as $muscle)
                     <x-ui.chip :href="route('muscles.show', $muscle)" wire:key="muscle-{{ $muscle->id }}" wire:navigate>
                         {{ $muscle->name }}
-                        <span class="tabular text-ink-400">{{ $muscle->exercises_count }}</span>
+                        <span class="tabular text-ink-300">{{ $muscle->exercises_count }}</span>
                     </x-ui.chip>
                 @endforeach
             </div>

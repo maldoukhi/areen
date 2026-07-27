@@ -348,7 +348,7 @@ class extends Component
                                 <span class="text-sm font-medium text-ink-100">
                                     {{ __('program.days.number', ['number' => $day->day_number]) }}{{ $day->title ? ' · '.$day->title : '' }}
                                 </span>
-                                <span class="text-xs text-ink-400">
+                                <span class="text-xs text-ink-300">
                                     {{ $day->is_rest_day
                                         ? __('program.days.rest')
                                         : __('program.days.exercises_count', ['count' => $day->exercises_count]) }}

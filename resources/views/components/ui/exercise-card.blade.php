@@ -57,6 +57,6 @@
     @endif
 
     @if ($meta !== [])
-        <p class="mt-auto text-xs leading-normal text-ink-400">{{ implode(' · ', $meta) }}</p>
+        <p class="mt-auto text-xs leading-normal text-ink-300">{{ implode(' · ', $meta) }}</p>
     @endif
 </x-ui.card>

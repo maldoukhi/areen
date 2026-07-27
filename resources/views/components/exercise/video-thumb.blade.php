@@ -55,7 +55,7 @@
 
     {{-- The baseline layer. Always painted, always local, never a request. --}}
     <div class="absolute inset-0 -z-10 flex items-center justify-center" aria-hidden="true">
-        <x-brand.mark class="size-16 text-brand-400 opacity-[0.06]"/>
+        <x-brand.club-logo class="size-16 opacity-[0.08]" mark-class="size-16 text-brand-400 opacity-[0.06]"/>
     </div>
 
     @if ($youtubeId)

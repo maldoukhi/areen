@@ -26,6 +26,6 @@
     </label>
 
     @if ($hint)
-        <p id="{{ $hintId }}" class="ps-8 text-xs leading-normal text-ink-400">{{ $hint }}</p>
+        <p id="{{ $hintId }}" class="ps-8 text-xs leading-normal text-ink-300">{{ $hint }}</p>
     @endif
 </div>

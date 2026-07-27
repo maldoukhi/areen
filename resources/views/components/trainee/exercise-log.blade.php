@@ -60,7 +60,7 @@
         </div>
     </div>
 
-    <div class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-ink-400">
+    <div class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-ink-300">
         @if ($programExercise->rest_seconds)
             <span class="tabular inline-flex items-center gap-1.5">
                 <x-ui.icon name="clock" class="size-4 shrink-0"/>
@@ -88,7 +88,7 @@
       At 360px a per-row label is the difference between four columns and two.
     --}}
     <div aria-hidden="true"
-         class="mt-4 grid grid-cols-[2.75rem_1fr_1fr_2.75rem] gap-2 px-2 text-center text-xs font-medium text-ink-400">
+         class="mt-4 grid grid-cols-[2.75rem_1fr_1fr_2.75rem] gap-2 px-2 text-center text-xs font-medium text-ink-300">
         <span>{{ __('exercise.prescription.sets') }}</span>
         <span>{{ __('trainee.log.reps') }}</span>
         <span>{{ __('trainee.log.weight_with_unit', ['unit' => $unit]) }}</span>

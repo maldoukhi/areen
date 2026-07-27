@@ -402,7 +402,7 @@ class extends Component
                                         <button type="button"
                                                 wire:sort:handle
                                                 aria-label="{{ __('admin.day.drag_handle') }}"
-                                                class="inline-flex size-11 shrink-0 cursor-grab items-center justify-center rounded-sm text-ink-400 hover:bg-ink-700">
+                                                class="inline-flex size-11 shrink-0 cursor-grab items-center justify-center rounded-sm text-ink-300 hover:bg-ink-700">
                                             <x-admin.icon name="grip" class="size-5"/>
                                         </button>
 
@@ -413,7 +413,7 @@ class extends Component
                                         <div class="min-w-0 flex-1">
                                             <p class="truncate font-medium text-ink-100">{{ $programExercise->exercise?->name }}</p>
 
-                                            <p class="mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-ink-400">
+                                            <p class="mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-ink-300">
                                                 <span class="tabular text-xl font-bold text-brand-400">
                                                     {{ __('exercise.prescription.sets_reps', ['sets' => $programExercise->sets, 'reps' => $programExercise->reps ?: '—']) }}
                                                 </span>
@@ -528,7 +528,7 @@ class extends Component
 
                                             <span class="min-w-0 flex-1">
                                                 <span class="block truncate text-sm font-medium text-ink-100">{{ $exercise->name }}</span>
-                                                <span class="block truncate text-xs text-ink-400">{{ $exercise->muscleGroup?->name }}</span>
+                                                <span class="block truncate text-xs text-ink-300">{{ $exercise->muscleGroup?->name }}</span>
                                             </span>
                                         </button>
                                     </li>

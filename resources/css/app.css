@@ -81,9 +81,20 @@
         text-wrap: balance;
     }
 
-    /* Elevation comes from the surface, never from a shadow. Focus is the one exception. */
+    /*
+     | Elevation comes from the surface, never from a shadow. Focus is the one
+     | exception (DESIGN.md §4).
+     |
+     | The halo DESIGN.md specifies — 3px of brand-400 at 40% — measures 2.27:1
+     | against ink-950 and 2.06:1 against ink-800 once composited, so on its own
+     | it is below the 3:1 WCAG 2.2 SC 2.4.11 floor for a focus indicator. The
+     | halo is kept exactly as specified and a solid 2px brand-400 core is drawn
+     | inside it, which measures 7.27:1 on ink-950 and 5.22:1 on ink-800. The
+     | ring reads the same; it is now visible to someone who needs it to be.
+     */
     :focus-visible {
-        outline: none;
+        outline: 2px solid var(--color-brand-400);
+        outline-offset: 1px;
         border-radius: var(--radius-sm);
         box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-brand-400) 40%, transparent);
     }
@@ -234,4 +245,45 @@ areen-rest-timer[data-flash='true'] {
     font-weight: 700;
     line-height: 1;
     font-variant-numeric: tabular-nums;
+}
+
+/*
+ | Athletic texture. A faint diagonal weave over the hero, so a dark panel reads
+ | as a surface with grain rather than as empty space. It sits under the content
+ | at very low contrast — DESIGN.md still calls decoration the enemy, and this
+ | has to be felt rather than noticed.
+ */
+@utility grid-weave {
+    background-image:
+        repeating-linear-gradient(
+            115deg,
+            color-mix(in oklab, var(--color-brand-400) 5%, transparent) 0 1px,
+            transparent 1px 14px
+        );
+}
+
+/*
+ | A card that lifts on pointer devices. Movement only — the border and surface
+ | carry the state on touch, where there is no hover to rely on.
+ */
+@media (hover: hover) {
+    .lift {
+        transition:
+            transform 150ms ease-out,
+            border-color 150ms ease-out;
+    }
+
+    .lift:hover {
+        transform: translateY(-2px);
+    }
+}
+
+/* A hairline that fades out, for section rules that should not cut the page. */
+@utility rule-fade {
+    height: 1px;
+    background: linear-gradient(
+        to var(--rule-direction, right),
+        color-mix(in oklab, var(--color-brand-400) 35%, transparent),
+        transparent 70%
+    );
 }

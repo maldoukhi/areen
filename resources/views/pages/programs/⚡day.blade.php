@@ -353,14 +353,14 @@ new class extends Component
                 @if ($this->currentDay->focusMuscle)
                     <div class="flex flex-col items-start gap-1">
                         <x-ui.chip :active="true">{{ $this->currentDay->focusMuscle->name }}</x-ui.chip>
-                        <span class="text-xs font-medium text-ink-400">{{ __('program.days.focus') }}</span>
+                        <span class="text-xs font-medium text-ink-300">{{ __('program.days.focus') }}</span>
                     </div>
                 @endif
             </div>
 
             @if (filled($this->currentDay->notes))
                 <x-ui.card class="mt-6">
-                    <h2 class="text-xs font-medium text-ink-400">{{ __('program.days.notes') }}</h2>
+                    <h2 class="text-xs font-medium text-ink-300">{{ __('program.days.notes') }}</h2>
                     <p class="mt-1 leading-relaxed text-ink-200">{{ $this->currentDay->notes }}</p>
                 </x-ui.card>
             @endif
@@ -389,7 +389,7 @@ new class extends Component
                                             {{ __('exercise.prescription.superset') }}
                                         </x-ui.chip>
 
-                                        <span class="text-xs leading-normal text-ink-400">
+                                        <span class="text-xs leading-normal text-ink-300">
                                             {{ __('exercise.prescription.superset_hint') }}
                                         </span>
                                     </div>
@@ -477,7 +477,7 @@ new class extends Component
                     </div>
 
                     @guest
-                        <p id="log-set-note" class="pt-2 text-xs leading-normal text-ink-400">
+                        <p id="log-set-note" class="pt-2 text-xs leading-normal text-ink-300">
                             {{ __('program.days.log_soon') }}
                         </p>
                     @endguest

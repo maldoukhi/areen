@@ -198,7 +198,7 @@ class extends Component
                 <div class="overflow-x-auto">
                     <table class="w-full text-start text-sm">
                         <thead>
-                            <tr class="border-b border-ink-700 text-xs font-medium text-ink-400">
+                            <tr class="border-b border-ink-700 text-xs font-medium text-ink-300">
                                 <th scope="col" class="py-3 pe-3 text-start">{{ __('admin.fields.name_ar') }}</th>
                                 <th scope="col" class="hidden py-3 pe-3 text-start md:table-cell">{{ __('program.level.label') }}</th>
                                 <th scope="col" class="hidden py-3 pe-3 text-start md:table-cell">{{ __('admin.entities.days') }}</th>
@@ -214,7 +214,7 @@ class extends Component
                                         <a href="{{ route('admin.programs.edit', $program) }}"
                                            wire:navigate
                                            class="block font-medium text-ink-100">{{ $program->name }}</a>
-                                        <span class="block text-xs text-ink-400" dir="ltr">{{ $program->slug }}</span>
+                                        <span class="block text-xs text-ink-300" dir="ltr">{{ $program->slug }}</span>
                                     </td>
 
                                     <td class="hidden py-3 pe-3 text-ink-300 md:table-cell">{{ $program->level?->label() }}</td>

@@ -11,7 +11,7 @@
 --}}
 
 <div {{ $attributes->class('relative isolate overflow-hidden rounded-lg border border-ink-700 bg-ink-800 px-5 py-12 text-center') }}>
-    <x-brand.mark class="pointer-events-none absolute inset-0 -z-10 m-auto size-40 text-brand-400 opacity-[0.06]"/>
+    <x-brand.club-logo class="pointer-events-none absolute inset-0 -z-10 m-auto size-40 text-brand-400 opacity-[0.06]" mark-class="pointer-events-none absolute inset-0 -z-10 m-auto size-40 text-brand-400 opacity-[0.06]"/>
 
     <div class="mx-auto flex max-w-[45ch] flex-col items-center gap-3">
         <h2 class="text-xl font-semibold text-ink-50">

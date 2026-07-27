@@ -223,7 +223,7 @@ class extends Component
                 <div class="overflow-x-auto">
                     <table class="w-full text-start text-sm">
                         <thead>
-                            <tr class="border-b border-ink-700 text-xs font-medium text-ink-400">
+                            <tr class="border-b border-ink-700 text-xs font-medium text-ink-300">
                                 <th scope="col" class="py-3 pe-3 text-start">{{ __('auth.fields.name') }}</th>
                                 <th scope="col" class="hidden py-3 pe-3 text-start md:table-cell">{{ __('auth.fields.email') }}</th>
                                 <th scope="col" class="hidden py-3 pe-3 text-start sm:table-cell">{{ __('admin.trainees.role') }}</th>
@@ -239,7 +239,7 @@ class extends Component
                                         <a href="{{ route('admin.trainees.show', $person) }}"
                                            wire:navigate
                                            class="block font-medium text-ink-100">{{ $person->name }}</a>
-                                        <span class="block text-xs text-ink-400 md:hidden" dir="ltr">{{ $person->email }}</span>
+                                        <span class="block text-xs text-ink-300 md:hidden" dir="ltr">{{ $person->email }}</span>
                                     </td>
 
                                     <td class="hidden py-3 pe-3 text-ink-300 md:table-cell" dir="ltr">{{ $person->email }}</td>

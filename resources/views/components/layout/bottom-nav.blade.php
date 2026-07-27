@@ -63,7 +63,7 @@
                        'flex h-[60px] flex-col items-center justify-center gap-1 rounded-sm text-center',
                        'transition-colors duration-150 ease-out',
                        'text-brand-400' => $item['active'],
-                       'text-ink-400' => ! $item['active'],
+                       'text-ink-300' => ! $item['active'],
                    ])>
                     <x-ui.icon :name="$item['icon']" class="size-[22px] shrink-0"/>
                     <span class="text-[11px] font-medium leading-none">{{ $item['label'] }}</span>

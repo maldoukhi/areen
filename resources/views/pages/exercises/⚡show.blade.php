@@ -114,7 +114,7 @@ new class extends Component
         <h1 class="text-[2rem] font-bold leading-tight text-ink-50">{{ $exercise->name }}</h1>
 
         <div class="flex flex-wrap items-center gap-2">
-            <span class="text-sm text-ink-400">{{ __('exercise.muscle.primary') }}</span>
+            <span class="text-sm text-ink-300">{{ __('exercise.muscle.primary') }}</span>
 
             <x-ui.chip :href="route('muscles.show', $exercise->muscleGroup)" wire:navigate>
                 {{ $exercise->muscleGroup->name }}
@@ -140,7 +140,7 @@ new class extends Component
           hands YouTube a visit it was not owed (DESIGN.md §6).
         --}}
         <section x-data="{ playing: false }" class="flex flex-col gap-2">
-            <h2 class="text-sm font-medium text-ink-400">{{ __('exercise.media.video') }}</h2>
+            <h2 class="text-sm font-medium text-ink-300">{{ __('exercise.media.video') }}</h2>
 
             <button type="button"
                     x-show="! playing"
@@ -174,14 +174,14 @@ new class extends Component
     <x-ui.card>
         <dl class="grid grid-cols-2 gap-4">
             <div class="flex flex-col gap-1">
-                <dt class="text-xs font-medium text-ink-400">{{ __('exercise.equipment.label') }}</dt>
+                <dt class="text-xs font-medium text-ink-300">{{ __('exercise.equipment.label') }}</dt>
                 <dd class="text-base text-ink-100">
                     {{ filled($exercise->equipment) ? __('exercise.equipment.'.$exercise->equipment) : __('exercise.equipment.none') }}
                 </dd>
             </div>
 
             <div class="flex flex-col gap-1">
-                <dt class="text-xs font-medium text-ink-400">{{ __('exercise.difficulty.label') }}</dt>
+                <dt class="text-xs font-medium text-ink-300">{{ __('exercise.difficulty.label') }}</dt>
                 <dd class="text-base text-ink-100">{{ $exercise->difficulty?->label() }}</dd>
             </div>
         </dl>
@@ -189,7 +189,7 @@ new class extends Component
 
     @if ($this->secondaryMuscles->isNotEmpty())
         <section class="flex flex-col gap-2">
-            <h2 id="secondary-muscles" class="text-sm font-medium text-ink-400">{{ __('exercise.muscle.secondary') }}</h2>
+            <h2 id="secondary-muscles" class="text-sm font-medium text-ink-300">{{ __('exercise.muscle.secondary') }}</h2>
 
             <div class="flex flex-wrap gap-2" aria-labelledby="secondary-muscles">
                 @foreach ($this->secondaryMuscles as $muscle)
@@ -216,7 +216,7 @@ new class extends Component
                     <li wire:key="program-{{ $program->getKey() }}" class="flex">
                         <x-ui.card :href="route('programs.show', $program)" wire:navigate class="flex w-full flex-col gap-1">
                             <span class="text-base font-semibold text-ink-50">{{ $program->name }}</span>
-                            <span class="tabular text-sm text-ink-400">
+                            <span class="tabular text-sm text-ink-300">
                                 {{ __('program.days.count', ['count' => $program->days_count]) }}
                             </span>
                         </x-ui.card>

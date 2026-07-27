@@ -67,6 +67,6 @@
     </div>
 
     @if ($hint)
-        <p class="text-xs leading-normal text-ink-400">{{ $hint }}</p>
+        <p class="text-xs leading-normal text-ink-300">{{ $hint }}</p>
     @endif
 </div>

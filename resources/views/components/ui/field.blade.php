@@ -22,7 +22,7 @@
     $describedBy = trim(implode(' ', array_filter([$hintId, $errorId]))) ?: null;
 
     $control = 'block w-full min-h-11 rounded-sm border bg-ink-900 px-3 py-2.5 text-base text-ink-100'
-        .' transition-colors duration-150 ease-out placeholder:text-ink-500'
+        .' transition-colors duration-150 ease-out placeholder:text-ink-300'
         .($error ? ' border-danger' : ' border-ink-700 focus:border-brand-400');
 @endphp
 
@@ -51,7 +51,7 @@
     @endif
 
     @if ($hint)
-        <p id="{{ $hintId }}" class="text-xs leading-normal text-ink-400">{{ $hint }}</p>
+        <p id="{{ $hintId }}" class="text-xs leading-normal text-ink-300">{{ $hint }}</p>
     @endif
 
     @if ($error)

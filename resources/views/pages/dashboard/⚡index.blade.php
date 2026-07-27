@@ -84,7 +84,7 @@ new class extends Component
     <x-trainee.offline-runtime/>
 
     <header class="flex flex-col gap-1">
-        <p class="text-sm text-ink-400">{{ __('trainee.greeting', ['name' => auth()->user()->name]) }}</p>
+        <p class="text-sm text-ink-300">{{ __('trainee.greeting', ['name' => auth()->user()->name]) }}</p>
         <h1 class="text-2xl font-bold leading-tight text-ink-50">{{ __('trainee.title') }}</h1>
     </header>
 
@@ -100,7 +100,7 @@ new class extends Component
         </x-ui.empty-state>
     @else
         <x-ui.card class="mt-6">
-            <p class="text-xs font-medium text-ink-400">{{ __('trainee.dashboard.active_program') }}</p>
+            <p class="text-xs font-medium text-ink-300">{{ __('trainee.dashboard.active_program') }}</p>
 
             <a href="{{ route('programs.show', $program) }}"
                wire:navigate
@@ -111,7 +111,7 @@ new class extends Component
             @if ($plan['day'] !== null)
                 <div class="mt-4 flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-t border-ink-700 pt-4">
                     <div class="flex flex-col gap-1">
-                        <span class="text-xs font-medium text-ink-400">
+                        <span class="text-xs font-medium text-ink-300">
                             {{ $plan['resuming'] ? __('trainee.dashboard.today') : __('trainee.dashboard.next_up') }}
                         </span>
 
@@ -128,7 +128,7 @@ new class extends Component
                 @endif
             @endif
 
-            <p class="mt-3 flex flex-wrap items-baseline gap-x-2 text-sm text-ink-400">
+            <p class="mt-3 flex flex-wrap items-baseline gap-x-2 text-sm text-ink-300">
                 <span>{{ __('trainee.dashboard.last_session') }}</span>
 
                 @if ($plan['last_session_on'] === null)

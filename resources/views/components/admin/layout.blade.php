@@ -39,7 +39,7 @@
 
     <title>{{ $pageTitle }} · {{ __('admin.title') }}</title>
 
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="/favicon.png" type="image/png">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles

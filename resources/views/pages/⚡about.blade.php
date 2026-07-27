@@ -43,7 +43,7 @@ new class extends Component
             <dl class="mt-4 divide-y divide-ink-800 border-y border-ink-800">
                 @foreach ($lines as $line)
                     <div class="flex min-h-14 items-center justify-between gap-4 py-3" wire:key="line-{{ $loop->index }}">
-                        <dt class="text-sm text-ink-400">{{ $line['label'] }}</dt>
+                        <dt class="text-sm text-ink-300">{{ $line['label'] }}</dt>
 
                         <dd class="text-end text-ink-100">
                             @if ($line['href'])

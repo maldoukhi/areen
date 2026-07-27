@@ -7,11 +7,11 @@
 
 @if ($user)
     <div {{ $attributes->class('border-t border-ink-800 p-3') }}>
-        <p class="px-3 text-xs font-medium leading-normal text-ink-400">{{ __('admin.shell.signed_in_as') }}</p>
+        <p class="px-3 text-xs font-medium leading-normal text-ink-300">{{ __('admin.shell.signed_in_as') }}</p>
 
         <p class="truncate px-3 pb-2 text-sm font-medium text-ink-100">{{ $user->name }}</p>
 
-        <p class="truncate px-3 pb-3 text-xs leading-normal text-ink-400">
+        <p class="truncate px-3 pb-3 text-xs leading-normal text-ink-300">
             {{ __('admin.trainees.role') }}: {{ $user->role->label() }}
         </p>
 

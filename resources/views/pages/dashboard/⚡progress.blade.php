@@ -314,7 +314,7 @@ new class extends Component
                           placeholder="{{ __('trainee.metrics.notes_placeholder') }}"
                           class="block min-h-11 w-full rounded-sm border border-ink-700 bg-ink-900 px-3 py-2.5
                                  text-base text-ink-100 transition-colors duration-150 ease-out
-                                 placeholder:text-ink-500 focus:border-brand-400">{{ old('notes') }}</textarea>
+                                 placeholder:text-ink-300 focus:border-brand-400">{{ old('notes') }}</textarea>
             </x-ui.field>
 
             <x-ui.button type="submit" :full="true">{{ __('trainee.metrics.save') }}</x-ui.button>

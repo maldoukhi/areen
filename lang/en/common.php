@@ -85,6 +85,23 @@ return [
         'primary_nav' => 'Primary navigation',
         'club_home' => 'Home',
         'connection_status' => 'Connection status',
+        'move_up' => 'Move up',
+        'move_down' => 'Move down',
+        'reorder_keyboard_hint' => 'Drag the handle, or use the move up and move down buttons.',
+    ],
+
+    /*
+     | Meta descriptions. Written for a search result and a shared link, not for
+     | the page itself — one sentence, no exclamation marks (DESIGN.md §9).
+     */
+    'seo' => [
+        'home' => 'Ready-made training plans and an illustrated exercise library, on your phone and working offline inside the gym.',
+        'programs' => 'Every published training plan: its level, its goal and how many days it runs.',
+        'exercises' => 'The full exercise library, sorted by muscle group, equipment and difficulty.',
+        'about' => 'Where the gym is, how to reach it and how to get in touch.',
+        'muscle' => ':muscle exercises available at the gym, each with its equipment and difficulty.',
+        'program_day' => ':day of :program — the exercises, sets, reps and rest times.',
+        'exercise' => ':exercise — the muscle it works, the equipment it needs and how it is performed.',
     ],
 
 ];

@@ -177,7 +177,7 @@ class extends Component
                 <div class="overflow-x-auto">
                     <table class="w-full text-start text-sm">
                         <thead>
-                            <tr class="border-b border-ink-700 text-xs font-medium text-ink-400">
+                            <tr class="border-b border-ink-700 text-xs font-medium text-ink-300">
                                 <th scope="col" class="py-3 pe-3 text-start">{{ __('admin.fields.name_ar') }}</th>
                                 <th scope="col" class="hidden py-3 pe-3 text-start sm:table-cell">{{ __('exercise.muscle.label') }}</th>
                                 <th scope="col" class="hidden py-3 pe-3 text-start md:table-cell">{{ __('exercise.equipment.label') }}</th>
@@ -204,7 +204,7 @@ class extends Component
                                                    class="block font-medium text-ink-100">{{ $exercise->name }}</a>
 
                                                 @unless ($exercise->is_active)
-                                                    <span class="block text-xs text-ink-400">{{ __('admin.trainees.inactive') }}</span>
+                                                    <span class="block text-xs text-ink-300">{{ __('admin.trainees.inactive') }}</span>
                                                 @endunless
                                             </div>
                                         </div>

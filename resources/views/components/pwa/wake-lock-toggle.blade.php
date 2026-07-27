@@ -20,7 +20,7 @@
             aria-checked="false"
             class="inline-flex min-h-11 w-full items-center gap-3 rounded-sm px-2 py-2 text-start
                    text-sm font-medium text-ink-200">
-        <svg class="size-5 shrink-0 text-ink-400 transition-colors duration-150 ease-out
+        <svg class="size-5 shrink-0 text-ink-300 transition-colors duration-150 ease-out
                     group-data-[state=on]:text-brand-400"
              viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
              stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">

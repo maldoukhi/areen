@@ -234,7 +234,7 @@ new class extends Component
 
             <h1 class="text-2xl font-bold leading-tight text-ink-50">{{ $this->heading() }}</h1>
 
-            <p class="flex flex-wrap items-center gap-x-3 text-sm text-ink-400">
+            <p class="flex flex-wrap items-center gap-x-3 text-sm text-ink-300">
                 <span>{{ $program->name }}</span>
 
                 <span class="sr-only">{{ __('trainee.log.performed_on') }}</span>

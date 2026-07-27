@@ -105,14 +105,14 @@ class extends Component
 --}}
 <div class="flex flex-1 flex-col justify-end gap-8 pt-20 pb-10 safe-pb sm:justify-center">
     <header class="flex flex-col gap-4">
-        <x-brand.mark class="size-12 text-brand-400"/>
+        <x-brand.club-logo class="size-12 text-brand-400" mark-class="size-12 text-brand-400"/>
 
         <div>
             <h1 class="text-2xl font-bold text-ink-50">{{ __('auth.login.title') }}</h1>
             <p class="mt-2 text-ink-300">{{ __('auth.login.subtitle') }}</p>
         </div>
 
-        <p class="text-sm text-ink-400">{{ $clubName }}</p>
+        <p class="text-sm text-ink-300">{{ $clubName }}</p>
     </header>
 
     <x-admin.flash/>

@@ -14,15 +14,51 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="{{ __('common.app_name') }}">
 
-    <title>@yield('title', $title ?? __('common.app_name'))</title>
+    {{--
+      Resolved into a variable rather than yielded straight into the tag, so the
+      social card can be given the exact same string. `og:title` disagreeing with
+      the tab title is the classic way a share preview goes stale.
 
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+      Both title styles are covered: `@section('title', …)` from the Blade pages
+      and Livewire's own `$view->title(…)`, which arrives as `$title`.
+    --}}
+    @php
+        $documentTitle = trim($__env->yieldContent('title')) ?: ($title ?? __('common.app_name'));
+    @endphp
+
+    <title>{{ $documentTitle }}</title>
+
+    <link rel="icon" href="/favicon.png" type="image/png">
     <link rel="apple-touch-icon" href="/brand/apple-touch-icon.png">
     <link rel="manifest" href="{{ route('manifest') }}">
 
+    {{--
+      The two weights that draw the first screen — the 400 the body is set in and
+      the 700 every page's h1 uses — in the Arabic subset, which is what the
+      default locale actually renders. They are discovered late otherwise: the
+      browser has to fetch app.css, parse it, lay out the text and only then
+      learn which @font-face it needs, which is a second round trip in front of
+      the first paint on a gym connection.
+
+      Only two of the eight files are preloaded on purpose. Preloading all of
+      them would put ~257 KB of fonts ahead of the stylesheet and make the page
+      slower, not faster; the 500/600 weights and the Latin subsets are still
+      fetched normally, when something on the page needs them.
+    --}}
+    <link rel="preload" href="/fonts/plex-arabic-arabic-400.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/fonts/plex-arabic-arabic-700.woff2" as="font" type="font/woff2" crossorigin>
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
+
+    {{--
+      Pages push `<x-seo.page>` here to describe themselves; Blade renders a
+      pushed block immediately, so by the time the stack is emitted the
+      declaration is already on record and `<x-seo.meta>` below can read it.
+    --}}
     @stack('head')
+
+    <x-seo.meta :title="$documentTitle"/>
 </head>
 <body class="flex min-h-dvh flex-col bg-ink-950 text-ink-100 antialiased">
     <a href="#main"

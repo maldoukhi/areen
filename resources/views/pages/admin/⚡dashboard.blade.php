@@ -81,7 +81,7 @@ class extends Component
     </div>
 
     @if ($draftCount > 0)
-        <p class="mt-6 text-sm text-ink-400">
+        <p class="mt-6 text-sm text-ink-300">
             {{ __('program.visibility.draft') }}: <span class="tabular text-ink-200">{{ $draftCount }}</span>
         </p>
     @endif

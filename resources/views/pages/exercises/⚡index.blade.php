@@ -237,7 +237,7 @@ new class extends Component
             --}}
             <div class="flex flex-col gap-4">
                 <div class="flex flex-col gap-2">
-                    <h2 id="filter-muscle" class="text-xs font-medium text-ink-400">{{ __('exercise.muscle.label') }}</h2>
+                    <h2 id="filter-muscle" class="text-xs font-medium text-ink-300">{{ __('exercise.muscle.label') }}</h2>
 
                     <div class="flex flex-wrap gap-2" role="group" aria-labelledby="filter-muscle">
                         <x-ui.chip tag="button"
@@ -255,7 +255,7 @@ new class extends Component
                 </div>
 
                 <div class="flex flex-col gap-2">
-                    <h2 id="filter-equipment" class="text-xs font-medium text-ink-400">{{ __('exercise.equipment.label') }}</h2>
+                    <h2 id="filter-equipment" class="text-xs font-medium text-ink-300">{{ __('exercise.equipment.label') }}</h2>
 
                     <div class="flex flex-wrap gap-2" role="group" aria-labelledby="filter-equipment">
                         <x-ui.chip tag="button"
@@ -273,7 +273,7 @@ new class extends Component
                 </div>
 
                 <div class="flex flex-col gap-2">
-                    <h2 id="filter-difficulty" class="text-xs font-medium text-ink-400">{{ __('exercise.difficulty.label') }}</h2>
+                    <h2 id="filter-difficulty" class="text-xs font-medium text-ink-300">{{ __('exercise.difficulty.label') }}</h2>
 
                     <div class="flex flex-wrap gap-2" role="group" aria-labelledby="filter-difficulty">
                         <x-ui.chip tag="button"

@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="flex min-h-dvh flex-col items-center justify-center gap-6 px-4 text-center safe-pt safe-pb">
-        <x-brand.mark class="size-16 text-ink-600"/>
+        <x-brand.club-logo class="size-16 text-ink-600" mark-class="size-16 text-ink-600"/>
 
         <div class="max-w-[45ch] space-y-2">
             <h1 class="text-2xl font-bold text-ink-50">{{ __('pwa.offline.title') }}</h1>

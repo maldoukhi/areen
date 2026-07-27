@@ -30,7 +30,7 @@
         <span data-pending-count class="tabular font-bold text-ember">{{ $pending }}</span>
     </span>
 
-    <span class="inline-flex items-center gap-2 text-sm text-ink-400 group-data-[pending=true]/sync:hidden">
+    <span class="inline-flex items-center gap-2 text-sm text-ink-300 group-data-[pending=true]/sync:hidden">
         {{-- Drawn here rather than added to x-ui.icon, which P1 owns. --}}
         <svg class="size-4 shrink-0 text-success" viewBox="0 0 24 24" fill="none" stroke="currentColor"
              stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
@@ -49,7 +49,7 @@
     </button>
 
     {{-- The reassurance, and the only sentence on this bar. --}}
-    <p class="hidden w-full text-xs leading-normal text-ink-400 group-data-[pending=true]/sync:block">
+    <p class="hidden w-full text-xs leading-normal text-ink-300 group-data-[pending=true]/sync:block">
         {{ __('trainee.log.saved_locally') }}
     </p>
 </div>

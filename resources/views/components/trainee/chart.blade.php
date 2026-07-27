@@ -72,7 +72,7 @@
         <span class="text-sm font-medium text-ink-200">{{ $label }}</span>
 
         @if ($count > 0)
-            <span class="tabular text-sm text-ink-400">
+            <span class="tabular text-sm text-ink-300">
                 {{ $format($min) }}@if ($unit) {{ $unit }}@endif — {{ $format($max) }}@if ($unit) {{ $unit }}@endif
             </span>
         @endif
@@ -133,13 +133,13 @@
             @endforeach
         </ul>
 
-        <div class="tabular flex items-center justify-between text-xs text-ink-400">
+        <div class="tabular flex items-center justify-between text-xs text-ink-300">
             <span>{{ __('trainee.progress.range_from', ['date' => $points[0]['label']]) }}</span>
             <span>{{ __('trainee.progress.range_to', ['date' => $points[$count - 1]['label']]) }}</span>
         </div>
 
         @if ($count === 1)
-            <p class="text-xs leading-normal text-ink-400">{{ __('trainee.progress.single_point') }}</p>
+            <p class="text-xs leading-normal text-ink-300">{{ __('trainee.progress.single_point') }}</p>
         @endif
     @endif
 </figure>

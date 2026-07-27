@@ -77,7 +77,7 @@
         <div class="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-ink-300">
             @if ($programExercise->rest_seconds)
                 <span class="tabular inline-flex items-center gap-1.5">
-                    <x-ui.icon name="clock" class="size-4 shrink-0 text-ink-400"/>
+                    <x-ui.icon name="clock" class="size-4 shrink-0 text-ink-300"/>
                     <span class="sr-only">{{ __('exercise.prescription.rest') }} </span>
                     {{ __('exercise.prescription.rest_value', ['seconds' => $programExercise->rest_seconds]) }}
                 </span>
@@ -85,14 +85,14 @@
 
             @if (filled($programExercise->tempo))
                 <span class="tabular inline-flex items-center gap-1.5">
-                    <span class="text-ink-400">{{ __('exercise.prescription.tempo') }}</span>
+                    <span class="text-ink-300">{{ __('exercise.prescription.tempo') }}</span>
                     {{ $programExercise->tempo }}
                 </span>
             @endif
 
             @if (filled($programExercise->weight_note))
                 <span class="inline-flex items-center gap-1.5">
-                    <span class="text-ink-400">{{ __('exercise.prescription.weight') }}</span>
+                    <span class="text-ink-300">{{ __('exercise.prescription.weight') }}</span>
                     {{ $programExercise->weight_note }}
                 </span>
             @endif
