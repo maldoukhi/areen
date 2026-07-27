@@ -26,6 +26,11 @@ new class extends Component
 
 @section('title', $program->name.' · '.__('common.app_name'))
 
+@push('head')
+    {{-- `article`, not `website`: a plan is a document with an author and a date. --}}
+    <x-seo.page :description="$program->description" type="article"/>
+@endpush
+
 <div>
     <x-program.overview :program="$program"/>
 </div>

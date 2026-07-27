@@ -36,7 +36,14 @@ new class extends Component
 @section('title', $program->name.' · '.__('common.app_name'))
 
 @push('head')
-    <meta name="robots" content="noindex, nofollow">
+    {{--
+      The access code in the address IS the credential, so this door is closed
+      to crawlers three ways over: `noindex, nofollow` here, `Disallow: /p/` in
+      robots.txt, and the program's absence from the sitemap. `noindex` is the
+      one of the three that still holds if someone pastes the link somewhere a
+      crawler already has permission to read.
+    --}}
+    <x-seo.page :description="$program->description" type="article" :noindex="true"/>
 @endpush
 
 {{--

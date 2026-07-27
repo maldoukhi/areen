@@ -49,6 +49,10 @@ new class extends Component
 
 @section('title', $muscleGroup->name.' · '.__('common.app_name'))
 
+@push('head')
+    <x-seo.page :description="__('common.seo.muscle', ['muscle' => $muscleGroup->name])"/>
+@endpush
+
 <div class="flex flex-col gap-6 px-4 pt-6 pb-12">
     <nav aria-label="{{ __('exercise.library') }}">
         <a href="{{ route('exercises.index') }}"

@@ -209,6 +209,10 @@ new class extends Component
 
 @section('title', __('exercise.library').' · '.__('common.app_name'))
 
+@push('head')
+    <x-seo.page :description="__('common.seo.exercises')"/>
+@endpush
+
 <div class="px-4 pt-6 pb-12">
     <h1 class="text-[2rem] font-bold leading-tight text-ink-50">{{ __('exercise.library') }}</h1>
 

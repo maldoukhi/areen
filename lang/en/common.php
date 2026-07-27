@@ -100,7 +100,7 @@ return [
         'exercises' => 'The full exercise library, sorted by muscle group, equipment and difficulty.',
         'about' => 'Where the gym is, how to reach it and how to get in touch.',
         'muscle' => ':muscle exercises available at the gym, each with its equipment and difficulty.',
-        'program_day' => ':day of :program — the exercises, sets, reps and rest times.',
+        'program_day' => ':day of :program. The exercises, sets, reps and rest times.',
         'exercise' => ':exercise — the muscle it works, the equipment it needs and how it is performed.',
     ],
 

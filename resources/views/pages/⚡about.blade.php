@@ -12,6 +12,12 @@ new class extends Component
 };
 ?>
 
+@section('title', ($club->club_name ?: __('common.app_name')).' · '.__('common.nav.about'))
+
+@push('head')
+    <x-seo.page :description="$club->description ?: __('common.seo.about')"/>
+@endpush
+
 {{--
   Everything on this page belongs to the club, not to Areen, so every field comes
   from the settings row and each one renders only when it has been filled in. A

@@ -101,6 +101,11 @@ new class extends Component
 
 @section('title', $exercise->name.' · '.__('common.app_name'))
 
+@push('head')
+    <x-seo.page type="article"
+                :description="$exercise->description ?: __('common.seo.exercise', ['exercise' => $exercise->name])"/>
+@endpush
+
 <div class="flex flex-col gap-6 px-4 pt-6 pb-12">
     <nav aria-label="{{ __('exercise.library') }}">
         <a href="{{ route('exercises.index') }}"

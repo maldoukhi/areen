@@ -2,6 +2,12 @@
 
 @section('title', __('pwa.offline.title'))
 
+@push('head')
+    {{-- Precached as a fallback for a page nobody has opened yet. It is a state,
+         not a destination, and has no business in a search result. --}}
+    <x-seo.page :description="__('pwa.offline.body')" :noindex="true"/>
+@endpush
+
 @section('content')
     <div class="flex min-h-dvh flex-col items-center justify-center gap-6 px-4 text-center safe-pt safe-pb">
         <x-brand.club-logo class="size-16 text-ink-600" mark-class="size-16 text-ink-600"/>

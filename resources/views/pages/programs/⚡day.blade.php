@@ -40,9 +40,14 @@ new class extends Component
         abort_unless($this->currentDay instanceof ProgramDay, 404);
     }
 
+    /**
+     * "Day 3 · Push · Areen". The day number alone is what the tab said before,
+     * and out of context — in a browser history, a bookmark bar, a search
+     * result — it does not say which program it belongs to.
+     */
     public function rendering($view): void
     {
-        $view->title($this->heading);
+        $view->title($this->heading.' · '.$this->program->name.' · '.__('common.app_name'));
     }
 
     /**
@@ -146,6 +151,11 @@ new class extends Component
     }
 };
 ?>
+
+@push('head')
+    <x-seo.page type="article"
+                :description="__('common.seo.program_day', ['day' => $this->heading, 'program' => $this->program->name])"/>
+@endpush
 
 {{--
   DESIGN.md §11 — the day screen. The trainee is standing up, one-handed, out of
