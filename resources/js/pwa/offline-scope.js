@@ -39,6 +39,7 @@ const PAGE_MAX_AGE_MS = 24 * 60 * 60 * 1000;
 
 // A program's public path, its private access-code path, and either one's days.
 const PROGRAM_PATH = /^(\/(?:programs|p)\/[^/]+)(?:\/day\/\d+)?\/?$/;
+const DAY_PATH = /^(\/(?:programs|p)\/[^/]+)\/day\/\d+\/?$/;
 
 let lastScope = null;
 
@@ -75,21 +76,48 @@ function absolute(value, base = location.href) {
     }
 }
 
-/** Day links belonging to this program, plus the program page itself. */
+/**
+ * Day links belonging to this program, plus the program page itself.
+ *
+ * Grouped by the program each link belongs to rather than string-matched against
+ * the current path, because the private door is `/p/<code>` while the days it
+ * lists live under `/programs/<slug>/day/<n>`. When the page offers days for
+ * exactly one program — which is what a program page is — that program is the
+ * scope even if its path is spelled differently from the one in the address bar.
+ */
 function pagesFrom(root, base) {
-    const found = new Set([new URL(base, location.origin).href]);
+    const groups = new Map();
 
     root.querySelectorAll('a[href]').forEach((anchor) => {
         const url = absolute(anchor.getAttribute('href'));
         if (! url || url.origin !== location.origin) return;
 
-        // `/programs/x/day/2` yes; `/programs/xylophone/day/2` no.
-        if (! url.pathname.startsWith(`${base}/day/`)) return;
-        if (! /\/day\/\d+\/?$/.test(url.pathname)) return;
+        const match = DAY_PATH.exec(url.pathname);
+        if (! match) return;
 
         url.hash = '';
-        found.add(url.href);
+        url.search = '';
+
+        if (! groups.has(match[1])) groups.set(match[1], new Set());
+
+        groups.get(match[1]).add(url.href);
     });
+
+    /*
+     * The program in the address bar wins outright. Failing that — which is the
+     * `/p/<code>` case — take the program the page talks about most. An overview
+     * links every one of its own days; a stray link to a different program is
+     * one link, and never the whole schedule.
+     */
+    let days = groups.get(base);
+
+    if (! days) {
+        for (const candidate of groups.values()) {
+            if (! days || candidate.size > days.size) days = candidate;
+        }
+    }
+
+    const found = new Set([new URL(base, location.origin).href, ...(days ?? [])]);
 
     return [...found].slice(0, MAX_PAGES);
 }

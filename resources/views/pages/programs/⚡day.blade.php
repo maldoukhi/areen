@@ -461,12 +461,12 @@ new class extends Component
                         <x-ui.button aria-disabled="true"
                                      aria-describedby="log-set-note"
                                      class="flex-1">
-                            {{ __('program.day.log_set') }}
+                            {{ __('program.days.log_set') }}
                         </x-ui.button>
                     </div>
 
                     <p id="log-set-note" class="pt-2 text-xs leading-normal text-ink-400">
-                        {{ __('program.day.log_soon') }}
+                        {{ __('program.days.log_soon') }}
                     </p>
                 @endisland
             </div>

@@ -6,6 +6,7 @@ return [
 
     'app_name' => 'Areen',
     'tagline' => 'Your training plan, in your pocket',
+    'list_separator' => ', ',
 
     'nav' => [
         'home' => 'Home',

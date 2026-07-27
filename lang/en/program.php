@@ -56,6 +56,8 @@ return [
         'next' => 'Next day',
         'previous' => 'Previous day',
         'today' => 'Today',
+        'log_set' => 'Log the set',
+        'log_soon' => 'Logging sets starts with your account in the next update.',
     ],
 
     'access' => [

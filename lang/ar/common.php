@@ -6,6 +6,7 @@ return [
 
     'app_name' => 'عرين',
     'tagline' => 'جدول تمرينك في جيبك',
+    'list_separator' => '، ',
 
     'nav' => [
         'home' => 'الرئيسية',

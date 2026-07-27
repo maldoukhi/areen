@@ -10,6 +10,7 @@ return [
 
     'muscle' => [
         'label' => 'Muscle',
+        'any' => 'All muscles',
         'groups' => 'Muscle groups',
         'primary' => 'Primary muscle',
         'secondary' => 'Supporting muscles',
@@ -46,9 +47,9 @@ return [
 
     'difficulty' => [
         'label' => 'Difficulty',
-        'easy' => 'Easy',
-        'medium' => 'Medium',
-        'hard' => 'Hard',
+        'beginner' => 'Beginner',
+        'intermediate' => 'Intermediate',
+        'advanced' => 'Advanced',
         'any' => 'Any difficulty',
     ],
 
@@ -111,6 +112,11 @@ return [
         'no_results_body' => 'No exercise goes by that name. Search by muscle or by equipment.',
     ],
 
+    'filters' => [
+        'none_title' => 'Widen your search',
+        'none_for' => 'No exercise uses :filter “:value”. Clear that filter or pick another.',
+        'none_for_combination' => 'No exercise matches everything you picked. Drop one filter and try again.',
+    ],
     'empty' => [
         'title' => 'Start with your first exercise',
         'body' => 'Add an exercise to the library and it is ready for every program you build.',

@@ -28,7 +28,8 @@ new class extends Component
 
     @php
         $lines = collect([
-            ['label' => __('common.contact.address'), 'value' => collect([$club->address, $club->city])->filter()->implode('، '), 'href' => $club->map_url],
+            // The separator is translated too — the two languages do not punctuate a list alike.
+            ['label' => __('common.contact.address'), 'value' => collect([$club->address, $club->city])->filter()->implode(__('common.list_separator')), 'href' => $club->map_url],
             ['label' => __('common.contact.phone'), 'value' => $club->phone, 'href' => $club->phone ? 'tel:'.preg_replace('/[^0-9+]/', '', $club->phone) : null],
             ['label' => __('common.contact.whatsapp'), 'value' => $club->whatsapp, 'href' => $club->whatsapp ? 'https://wa.me/'.preg_replace('/[^0-9]/', '', $club->whatsapp) : null],
             ['label' => __('common.contact.instagram'), 'value' => $club->instagram, 'href' => $club->instagram ? 'https://instagram.com/'.ltrim($club->instagram, '@') : null],
