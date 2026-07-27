@@ -3,18 +3,23 @@
 declare(strict_types=1);
 
 /*
- * iOS Safari zooms the page when it focuses a field rendering below 16px, and
- * does not zoom back out. The stylesheet floors controls on touch screens so
- * that never fires — and the viewport must keep pinch zoom, because taking it
- * away would fix our font sizing at the cost of anyone who zooms to read.
+ * Two separate things stop the page moving under a thumb.
+ *
+ * The 16px floor on form controls removes the reason Safari zooms on focus at
+ * all, and it is the only one of the two that works on iOS — Safari has ignored
+ * `user-scalable=no` since iOS 10.
+ *
+ * The viewport lock is the product owner's decision, taken with the
+ * accessibility cost stated: it denies pinch zoom to anyone who zooms in order
+ * to read, and Lighthouse scores it as a failure. It binds Android only.
  */
 
-it('never disables pinch zoom on any page', function (): void {
+it('locks zoom off on every page', function (): void {
     foreach (['/', '/programs', '/exercises', '/offline', '/admin/login'] as $path) {
         $html = $this->get($path)->getContent();
 
-        expect($html)->not->toContain('user-scalable')
-            ->and($html)->not->toContain('maximum-scale');
+        expect($html)->toContain('user-scalable=no')
+            ->and($html)->toContain('maximum-scale=1');
     }
 });
 

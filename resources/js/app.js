@@ -1,6 +1,7 @@
 import { registerServiceWorker } from './pwa/register-sw';
 import { markDisplayMode } from './pwa/standalone';
 import { defineInstallBanner } from './pwa/install-banner';
+import { defineInstallButton } from './pwa/install-button';
 import { defineUpdateBar } from './pwa/update-bar';
 import { defineWakeLockToggle } from './pwa/wake-lock-toggle';
 import { defineRestTimer } from './pwa/rest-timer';
@@ -24,6 +25,7 @@ markDisplayMode();
  * nothing here needs a translation of its own.
  */
 defineInstallBanner();
+defineInstallButton();
 defineUpdateBar();
 defineWakeLockToggle();
 defineRestTimer();

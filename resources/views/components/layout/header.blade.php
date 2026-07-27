@@ -48,6 +48,11 @@
             <span class="truncate text-base font-semibold leading-tight text-ink-50">{{ $clubName }}</span>
         </a>
 
-        <x-layout.locale-switcher/>
+        <div class="flex items-center gap-2">
+            {{-- Hides itself inside the installed app and where installing is impossible. --}}
+            <x-pwa.install-button/>
+
+            <x-layout.locale-switcher/>
+        </div>
     </div>
 </header>

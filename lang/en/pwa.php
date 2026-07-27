@@ -11,6 +11,8 @@ return [
         'dismiss' => 'Not now',
         'ios_title' => 'Add Areen to your home screen',
         'ios_body' => 'In the Safari toolbar tap Share, then choose Add to Home Screen.',
+        'ios_step_share' => 'Tap Share in the Safari toolbar at the bottom.',
+        'ios_step_add' => 'Scroll and choose Add to Home Screen.',
     ],
 
     'update' => [

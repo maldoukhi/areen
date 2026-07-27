@@ -6,8 +6,17 @@
 <html lang="{{ str_replace('_', '-', $locale) }}" dir="{{ $dir }}">
 <head>
     <meta charset="utf-8">
-    {{-- viewport-fit=cover is what makes env(safe-area-inset-*) resolve to real values. --}}
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    {{--
+      viewport-fit=cover is what makes env(safe-area-inset-*) resolve to real values.
+
+      Zoom is locked off at the product owner's decision. Note that Safari has
+      ignored `user-scalable=no` since iOS 10, so this binds Android only — on
+      iPhone what actually stopped the page jumping is the 16px floor on form
+      controls in app.css, which removes the reason Safari zoomed in the first
+      place. Lighthouse counts this as an accessibility failure.
+    --}}
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
     <meta name="theme-color" content="{{ config('areen.brand.theme_color') }}">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">

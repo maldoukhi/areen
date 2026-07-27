@@ -19,27 +19,15 @@
 import { isIOS, readFlag, writeFlag } from './platform.js';
 // Display-mode detection lives in standalone.js; platform.js owns storage and UA.
 import { isInstalled } from './standalone.js';
+// One owner for `beforeinstallprompt`: the event can only be answered once, so
+// the banner and the header button ask the same module rather than each racing
+// for it with a listener of their own.
+import { canPrompt, promptInstall } from './install-prompt.js';
 
 const DISMISSED_KEY = 'areen:install-dismissed';
 
-/*
- * `beforeinstallprompt` can fire before the custom element upgrades, and the
- * event is only useful if it was cancelled at the moment it fired. So it is
- * caught here at module scope — this file is imported from the entry point,
- * which runs before the page settles — and parked for whoever asks later.
- */
-let deferredPrompt = null;
-
 if (typeof window !== 'undefined') {
-    window.addEventListener('beforeinstallprompt', (event) => {
-        event.preventDefault();
-        deferredPrompt = event;
-
-        window.dispatchEvent(new CustomEvent('areen:install-available'));
-    });
-
-    window.addEventListener('appinstalled', () => {
-        deferredPrompt = null;
+    window.addEventListener('areen:install-completed', () => {
         // Installed is the strongest possible dismissal.
         writeFlag(DISMISSED_KEY, String(Date.now()));
     });
@@ -76,7 +64,7 @@ class InstallBanner extends HTMLElement {
         // Already the app, or already told us no.
         if (isInstalled() || readFlag(DISMISSED_KEY)) return this.hide();
 
-        if (deferredPrompt) return this.show('prompt');
+        if (canPrompt()) return this.show('prompt');
 
         // No event yet. On iOS there never will be one, so the share-sheet
         // instructions are the whole offer. Everywhere else we wait quietly —
@@ -102,19 +90,15 @@ class InstallBanner extends HTMLElement {
     }
 
     async install() {
-        if (! deferredPrompt) return this.hide();
-
-        const prompt = deferredPrompt;
-        // The event is single-use; a second `prompt()` call throws.
-        deferredPrompt = null;
+        if (! canPrompt()) return this.hide();
 
         this.hidden = true;
 
         try {
-            await prompt.prompt();
-            const choice = await prompt.userChoice;
+            // The module owns the single-use event; a second call is a no-op.
+            const outcome = await promptInstall();
 
-            if (choice?.outcome === 'dismissed') {
+            if (outcome === 'dismissed') {
                 // Declining the system sheet is a real answer. Do not re-ask.
                 writeFlag(DISMISSED_KEY, String(Date.now()));
             }
