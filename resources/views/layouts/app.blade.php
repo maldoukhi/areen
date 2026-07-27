@@ -28,8 +28,8 @@
 
     <title>{{ $documentTitle }}</title>
 
-    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}?v={{ substr(md5_file(public_path('favicon.png')), 0, 8) }}">
-    <link rel="apple-touch-icon" href="{{ asset('brand/apple-touch-icon.png') }}?v={{ substr(md5_file(public_path('brand/apple-touch-icon.png')), 0, 8) }}">
+    <link rel="icon" href="/favicon.png" type="image/png">
+    <link rel="apple-touch-icon" href="/brand/apple-touch-icon.png">
     <link rel="manifest" href="{{ route('manifest') }}">
 
     {{--
@@ -45,6 +45,8 @@
       slower, not faster; the 500/600 weights and the Latin subsets are still
       fetched normally, when something on the page needs them.
     --}}
+    <link rel="preload" href="/fonts/plex-arabic-arabic-400.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/fonts/plex-arabic-arabic-700.woff2" as="font" type="font/woff2" crossorigin>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
