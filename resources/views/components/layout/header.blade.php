@@ -30,13 +30,6 @@
         ?: $value('club_name_ar')
         ?: __('common.app_name');
 
-    $logo = $value('logo_url');
-
-    if (! $logo && ($logoPath = $value('logo_path'))) {
-        $logo = \Illuminate\Support\Str::startsWith($logoPath, ['http://', 'https://', '/'])
-            ? $logoPath
-            : rescue(fn () => \Illuminate\Support\Facades\Storage::disk('public')->url($logoPath), null, false);
-    }
 @endphp
 
 <header {{ $attributes->class([
@@ -50,11 +43,7 @@
         <a href="{{ route('home') }}"
            class="-ms-2 inline-flex min-h-11 items-center gap-3 rounded-sm px-2 text-start"
            aria-label="{{ __('common.a11y.club_home') }}">
-            @if ($logo)
-                <img src="{{ $logo }}" alt="" class="h-10 w-auto max-w-[104px] object-contain" width="104" height="40">
-            @else
-                <x-brand.mark class="size-8 shrink-0 text-brand-400"/>
-            @endif
+            <x-brand.club-logo :settings="$settings"/>
 
             <span class="truncate text-base font-semibold leading-tight text-ink-50">{{ $clubName }}</span>
         </a>

@@ -427,8 +427,10 @@ new class extends Component
           padding is handed over rather than counted twice.
 
           SCOPE: this bar is layout only in this phase.
-            · P4 owns set logging. The button is announced as unavailable rather
-              than hidden, so the affordance and its explanation ship together.
+            · P4 owns set logging and has taken the seam: signed in, the button
+              opens /dashboard/log for this program and day. A visitor with no
+              account still sees it, announced as unavailable rather than hidden,
+              so the affordance and its explanation ship together.
             · P5 owns the rest timer. The ring and the readout are drawn in their
               idle state; P5 counts the dial down, promotes the figure to the 48px
               ember display DESIGN.md §11 specifies while resting, and adds the
@@ -458,16 +460,27 @@ new class extends Component
                             </span>
                         </div>
 
-                        <x-ui.button aria-disabled="true"
-                                     aria-describedby="log-set-note"
-                                     class="flex-1">
-                            {{ __('program.days.log_set') }}
-                        </x-ui.button>
+                        {{-- P4 seam: signed in, the button is the door to the logging screen. --}}
+                        @auth
+                            <x-ui.button :href="route('dashboard.log', ['program' => $this->program->slug, 'day' => $this->dayNumber])"
+                                         wire:navigate
+                                         class="flex-1">
+                                {{ __('program.days.log_set') }}
+                            </x-ui.button>
+                        @else
+                            <x-ui.button aria-disabled="true"
+                                         aria-describedby="log-set-note"
+                                         class="flex-1">
+                                {{ __('program.days.log_set') }}
+                            </x-ui.button>
+                        @endauth
                     </div>
 
-                    <p id="log-set-note" class="pt-2 text-xs leading-normal text-ink-400">
-                        {{ __('program.days.log_soon') }}
-                    </p>
+                    @guest
+                        <p id="log-set-note" class="pt-2 text-xs leading-normal text-ink-400">
+                            {{ __('program.days.log_soon') }}
+                        </p>
+                    @endguest
                 @endisland
             </div>
         </div>

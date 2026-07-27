@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace App\Http\Requests\Trainee;
 
 use App\Models\WorkoutLog;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Carbon;
+use Illuminate\Validation\ValidationException;
 
 /**
  * The offline queue arriving all at once.
@@ -62,6 +64,24 @@ class SyncWorkoutLogsRequest extends FormRequest
             'logs.*.is_completed' => ['nullable', 'boolean'],
             'logs.*.note' => ['nullable', 'string', 'max:255'],
         ];
+    }
+
+    /**
+     * Answer a bad batch with JSON, whatever the rest of the app does.
+     *
+     * `bootstrap/app.php` narrows automatic JSON rendering to `api/*`, and this
+     * endpoint deliberately lives under `/dashboard` so it can use the session
+     * cookie. Without this override a malformed round would come back as a 302 to
+     * the previous page, the drain would never see the `logs.<n>.<field>` keys it
+     * uses to drop the offender, and one bad row would strand the whole queue on
+     * the phone forever.
+     */
+    protected function failedValidation(Validator $validator): void
+    {
+        throw new ValidationException($validator, response()->json([
+            'message' => $validator->errors()->first(),
+            'errors' => $validator->errors()->messages(),
+        ], 422));
     }
 
     /**

@@ -22,7 +22,7 @@
     aria-label="{{ __('pwa.install.title') }}">
     <div class="mx-auto w-full max-w-[520px] rounded-lg border border-ink-700 bg-ink-800 p-5">
         <div class="flex items-start gap-3">
-            <x-brand.mark class="mt-0.5 size-8 shrink-0 text-brand-400"/>
+            <x-brand.club-logo height="h-8" mark-class="mt-0.5 size-8 shrink-0 text-brand-400" class="mt-0.5 shrink-0"/>
 
             <div class="min-w-0 flex-1">
                 <div data-variant="prompt" hidden>

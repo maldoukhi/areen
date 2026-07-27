@@ -78,6 +78,7 @@ class AppServiceProvider extends ServiceProvider
 
         $this->pointAuthRedirectsAtTheOneDoor();
         $this->registerTheTraineeSurface();
+        $this->registerThePrintSurface();
     }
 
     /**
@@ -94,6 +95,20 @@ class AppServiceProvider extends ServiceProvider
     private function registerTheTraineeSurface(): void
     {
         Route::middleware('web')->group(base_path('routes/trainee.php'));
+    }
+
+    /**
+     * The print sheet and the PDF download, kept in `routes/print.php` so P6
+     * can be reviewed on its own rather than mixed into `routes/web.php`.
+     *
+     * Registered here for the same reason the trainee surface is: this file
+     * already holds the permission map, and the `web` group is what carries
+     * the session `EnsureProgramIsViewable` reads to tell an unlocked private
+     * program apart from one nobody has opened the access code for yet.
+     */
+    private function registerThePrintSurface(): void
+    {
+        Route::middleware('web')->group(base_path('routes/print.php'));
     }
 
     /**

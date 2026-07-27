@@ -1,0 +1,274 @@
+/*
+ | Print stylesheet — DESIGN.md §8. Deliberately its own file, never imported
+ | from resources/css/app.css: the live app is dark-mode-first, and a printed
+ | sheet is white paper and somebody's home-printer ink budget. The two must
+ | never be able to bleed into each other.
+ |
+ | Not built by Vite either. App\Support\ProgramPrintPresenter::css() reads
+ | this file's bytes server-side and inlines them into the print layout's own
+ | <style> tag, so the exact same stylesheet reaches the browser-viewed print
+ | page and the Chromium-rendered PDF, with nothing left to fetch over a
+ | network in either case.
+ |
+ | Logical properties only (inline-/block-/-start/-end), same rule as the rest
+ | of the app: the sheet has to read correctly in both `dir="rtl"` and
+ | `dir="ltr"` without a second stylesheet.
+ */
+
+* {
+    box-sizing: border-box;
+}
+
+@page {
+    size: A4;
+    margin: 14mm 12mm;
+}
+
+html {
+    background: #fff;
+}
+
+body {
+    margin: 0;
+    background: #fff;
+    color: #111;
+    font-family: 'IBM Plex Sans Arabic', system-ui, sans-serif;
+    font-size: 11.5pt;
+    line-height: 1.5;
+    /* Tracking breaks Arabic letter joining — same rule as the live app. */
+    letter-spacing: 0;
+}
+
+/* Every number on the sheet holds its width so a column of digits stays put. */
+th,
+td,
+time {
+    font-variant-numeric: tabular-nums;
+}
+
+/*
+ | Screen-only controls: the print/download bar. `@media print` clears it, so
+ | neither the browser's print preview nor the PDF ever shows a button that
+ | cannot be pressed on paper (DESIGN.md §8's "hides navigation, buttons,
+ | video and the footer").
+ */
+.no-print {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    background: #f2f5f6;
+    border-block-end: 1px solid #ddd;
+}
+
+.no-print a,
+.no-print button {
+    font: inherit;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 1px solid #61b5d1;
+    background: #fff;
+    color: #152d3a;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.no-print p {
+    margin: 0;
+    margin-inline-end: auto;
+    font-size: 10pt;
+    color: #444;
+}
+
+.pdf-unavailable {
+    margin: 16px;
+    padding: 14px 16px;
+    border: 1px solid #f2994a;
+    border-radius: 8px;
+    background: #fff7ef;
+}
+
+.pdf-unavailable h2 {
+    margin: 0 0 4px;
+    font-size: 12pt;
+}
+
+.pdf-unavailable p {
+    margin: 0;
+    font-size: 10pt;
+    color: #444;
+}
+
+/* One physical page per day — every day after the first starts a fresh one. */
+.day-page {
+    padding-block: 6mm 10mm;
+}
+
+.day-page + .day-page {
+    break-before: page;
+}
+
+.doc-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-block-end: 10px;
+    margin-block-end: 14px;
+    border-block-end: 2px solid #61b5d1;
+}
+
+.doc-header img {
+    display: block;
+    block-size: 36px;
+    inline-size: auto;
+    max-inline-size: 120px;
+    object-fit: contain;
+}
+
+.doc-header .identity {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.doc-header .club-name {
+    font-size: 12.5pt;
+    font-weight: 700;
+}
+
+.doc-header .program-name {
+    font-size: 10pt;
+    color: #444;
+}
+
+.doc-header .printed-on {
+    margin-inline-start: auto;
+    text-align: end;
+    font-size: 9pt;
+    color: #444;
+    white-space: nowrap;
+}
+
+.day-title {
+    margin-block: 0 4px;
+    font-size: 16pt;
+    font-weight: 700;
+}
+
+.day-meta {
+    margin-block: 0 12px;
+    font-size: 9.5pt;
+    color: #444;
+}
+
+.notice-box {
+    margin-block: 14px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.notice-box h2 {
+    margin-block: 0 8px;
+    font-size: 13pt;
+}
+
+.notice-box p {
+    margin: 0;
+    color: #333;
+}
+
+.notice-box p + p {
+    margin-block-start: 8px;
+}
+
+table.exercise-table {
+    inline-size: 100%;
+    border-collapse: collapse;
+    font-size: 10pt;
+}
+
+.exercise-table th,
+.exercise-table td {
+    border: 1px solid #ccc;
+    padding: 6px 8px;
+    text-align: start;
+    vertical-align: middle;
+}
+
+.exercise-table thead th {
+    background: #f2f5f6;
+    font-weight: 700;
+    text-align: start;
+}
+
+.exercise-table td.col-number,
+.exercise-table td.col-sets,
+.exercise-table td.col-reps,
+.exercise-table td.col-rest {
+    text-align: center;
+    white-space: nowrap;
+}
+
+.exercise-table th.col-number {
+    inline-size: 8mm;
+    text-align: center;
+}
+
+.exercise-table td.col-weight {
+    min-inline-size: 26mm;
+}
+
+.day-footer {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-block-start: 16px;
+    padding-block-start: 10px;
+    border-block-start: 1px solid #ddd;
+}
+
+.day-footer .qr {
+    flex-shrink: 0;
+    line-height: 0;
+}
+
+.day-footer .qr svg {
+    display: block;
+    inline-size: 24mm;
+    block-size: 24mm;
+}
+
+.day-footer .scan-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    font-size: 8.5pt;
+    color: #444;
+}
+
+.day-footer .verify-url {
+    word-break: break-all;
+    color: #666;
+}
+
+.day-footer .page-position {
+    margin-inline-start: auto;
+    align-self: flex-end;
+    font-size: 8.5pt;
+    color: #888;
+}
+
+/* Nothing on a printed sheet plays a video — a defensive rule, not a fix. */
+video,
+iframe {
+    display: none;
+}
+
+@media print {
+    .no-print {
+        display: none !important;
+    }
+}

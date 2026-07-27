@@ -42,8 +42,18 @@ class SettingSeeder extends Seeder
                 'email' => null,
                 // The club logo is uploaded by the admin; until then the UI falls
                 // back to the Areen mark.
-                'logo_path' => null,
+                // Shipped with the installation, so the club's mark shows before anyone
+                // opens the settings screen. An upload from the panel replaces it.
+                'logo_path' => 'brand/logo-qaswarah.png',
             ]
         );
+
+        /*
+         * `Setting::current()` is cached forever, and the model only forgets on
+         * its own `saved` event. A cache entry written before the database was
+         * refreshed outlives the refresh and keeps serving a club identity that
+         * no longer exists, so seeding drops it explicitly.
+         */
+        Setting::forget();
     }
 }

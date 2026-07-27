@@ -105,10 +105,24 @@ class Setting extends Model
         static::deleted(static fn () => static::forget());
     }
 
+    /**
+     * A club logo arrives one of two ways, and they do not live in the same place.
+     *
+     * An upload from the panel goes to the public storage disk. The logo shipped
+     * with an installation is a repository asset under `public/brand/`, which is
+     * served directly and needs no `storage:link` — so a fresh deploy shows the
+     * club's mark before anyone has opened the settings screen.
+     */
     protected function logoUrl(): Attribute
     {
-        return Attribute::get(fn (): ?string => filled($this->logo_path)
-            ? Storage::disk('public')->url($this->logo_path)
-            : null);
+        return Attribute::get(function (): ?string {
+            if (blank($this->logo_path)) {
+                return null;
+            }
+
+            return str_starts_with($this->logo_path, 'brand/')
+                ? asset($this->logo_path)
+                : Storage::disk('public')->url($this->logo_path);
+        });
     }
 }
