@@ -287,3 +287,43 @@ areen-rest-timer[data-flash='true'] {
         transparent 70%
     );
 }
+
+/*
+ |--------------------------------------------------------------------------
+ | Touch behaviour
+ |--------------------------------------------------------------------------
+ |
+ | iOS Safari zooms the whole page when a field it is about to focus renders
+ | below 16px, and it never zooms back out. Between sets that means the layout
+ | jumps sideways the moment a trainee taps a reps box. Any control is therefore
+ | floored at 16px on a touch screen, whatever a utility class asked for; a
+ | pointer device keeps the smaller size the design specifies.
+ |
+ | The viewport tag deliberately does NOT carry `maximum-scale` or
+ | `user-scalable=no`. Pinch zoom is how a lot of people read, and taking it away
+ | to fix our own font sizing would trade one person's annoyance for another
+ | person's shut door.
+ */
+@media (hover: none) and (pointer: coarse) {
+    input:not([type='checkbox']):not([type='radio']),
+    select,
+    textarea {
+        font-size: max(16px, 1em);
+    }
+}
+
+/*
+ | Kills the double-tap-to-zoom gesture on things meant to be tapped once, and
+ | with it the delay the browser holds a tap for while it waits for a second one.
+ | Scrolling and pinch zoom are untouched.
+ */
+button,
+[role='button'],
+a,
+label,
+summary,
+input,
+select,
+textarea {
+    touch-action: manipulation;
+}
