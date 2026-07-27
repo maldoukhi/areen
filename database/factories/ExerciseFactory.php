@@ -157,12 +157,13 @@ class ExerciseFactory extends Factory
     {
         $index = self::$cursor++;
         $exercise = self::EXERCISES[$index % count(self::EXERCISES)];
-        $suffix = $index >= count(self::EXERCISES) ? '-'.$index : '';
 
         return [
             'name_ar' => $exercise['ar'],
             'name_en' => $exercise['en'],
-            'slug' => $exercise['slug'].$suffix,
+            // Always suffixed: `slug` is unique and ExerciseSeeder owns the
+            // clean ones, so factory rows can never collide with seeded ones.
+            'slug' => $exercise['slug'].'-'.$index,
             'muscle_group_id' => MuscleGroup::factory(),
             'secondary_muscles' => $exercise['secondary'],
             // Stored as a stable slug; the UI translates it.

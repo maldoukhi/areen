@@ -123,7 +123,7 @@ exercises        name_ar/en، slug، muscle_group_id، secondary_muscles(json)،
                  equipment، difficulty، youtube_url، media_path، description_ar/en
 programs         name_ar/en، slug، description_ar/en، days_count، level، goal،
                  cover_path، is_public، is_featured، access_code(unique)، published_at
-program_days     program_id، day_number، title_ar/en، focus_muscle_id، is_rest_day، notes
+program_days     program_id، day_number، title_ar/en، focus_muscle_id، is_rest_day، notes_ar/en
 program_exercises program_day_id، exercise_id، sort، sets، reps، rest_seconds، tempo،
                  weight_note، coach_notes_ar/en، superset_group
 program_user     program_id، user_id، started_at، is_active
@@ -145,6 +145,8 @@ body_metrics     user_id، measured_on، weight، body_fat، notes
 - **`User::activeProgram()` دالّة لا علاقة** — نادِها بأقواس؛ `$user->activeProgram` يرمي `LogicException`.
 - **`difficulty` و `level` أعمدة نصية بلا قيد في قاعدة البيانات** — الـ enum cast هو الحارس الوحيد، وأي كتابة خارج Eloquent ستنفجر عند القراءة.
 - النطاقات تستخدم سمة Laravel 13 `#[Scope]` لا بادئة `scopeX` — الاستدعاء نفسه: `Exercise::query()->active()`.
+- **`equipment` و `goal` تُخزَّن كـ slugs إنجليزية ثابتة** (`barbell` `dumbbell` `cable` `machine` `bodyweight` · `general-fitness` `hypertrophy` `fat-loss`) والواجهة تترجمها عبر `exercise.equipment.*` و `program.goal.*`. لا تخزّن العربية في العمود.
+- مصانع الاختبار تُلحق لاحقة رقمية بالـ slug (`chest-0`) حتى لا تصطدم بالـ seeders في اختبار يستخدم الاثنين؛ `MuscleGroupFactory::named('chest')` يعطي الـ slug النظيف عند الحاجة.
 
 ---
 

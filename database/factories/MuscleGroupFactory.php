@@ -13,8 +13,9 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 class MuscleGroupFactory extends Factory
 {
     /**
-     * The real training split. `slug` is unique in the schema, so the factory
-     * walks this list in order and suffixes once it wraps around.
+     * The real training split. `slug` is unique in the schema and the seeder
+     * already owns the clean slugs, so the factory walks this list in order and
+     * always suffixes — factory rows can never collide with seeded ones.
      *
      * @var list<array{ar: string, en: string, slug: string, icon: string}>
      */
@@ -44,19 +45,20 @@ class MuscleGroupFactory extends Factory
     {
         $index = self::$cursor++;
         $group = self::GROUPS[$index % count(self::GROUPS)];
-        $suffix = $index >= count(self::GROUPS) ? '-'.$index : '';
 
         return [
             'name_ar' => $group['ar'],
             'name_en' => $group['en'],
-            'slug' => $group['slug'].$suffix,
+            'slug' => $group['slug'].'-'.$index,
             'icon' => $group['icon'],
             'sort' => ($index % count(self::GROUPS)) + 1,
         ];
     }
 
     /**
-     * Pin the group to one of the real split entries by its slug.
+     * Pin the group to one of the real split entries, clean slug included. Do
+     * not combine this with MuscleGroupSeeder in the same test: the seeder owns
+     * that slug already.
      */
     public function named(string $slug): static
     {

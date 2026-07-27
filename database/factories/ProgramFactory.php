@@ -65,7 +65,7 @@ class ProgramFactory extends Factory
             'level' => 'beginner',
             'goal' => 'general-fitness',
             'days' => 2,
-            'desc_ar' => 'خيار لمن لا يملك سوى يومين في الأسبوع، يغطي كل المجموعات العضلية.',
+            'desc_ar' => 'خيار لمن لا يملك سوى يومين في الأسبوع، يغطي كل العضلات الأساسية.',
             'desc_en' => 'An option for two sessions a week that still covers every muscle group.',
         ],
     ];
@@ -84,12 +84,13 @@ class ProgramFactory extends Factory
     {
         $index = self::$cursor++;
         $program = self::PROGRAMS[$index % count(self::PROGRAMS)];
-        $suffix = $index >= count(self::PROGRAMS) ? '-'.$index : '';
 
         return [
             'name_ar' => $program['ar'],
             'name_en' => $program['en'],
-            'slug' => $program['slug'].$suffix,
+            // Always suffixed: `slug` is unique and ProgramSeeder owns the clean
+            // ones, so factory rows can never collide with seeded ones.
+            'slug' => $program['slug'].'-'.$index,
             'description_ar' => $program['desc_ar'],
             'description_en' => $program['desc_en'],
             'days_count' => $program['days'],
