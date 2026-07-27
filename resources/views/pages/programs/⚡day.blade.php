@@ -409,6 +409,7 @@ new class extends Component
                                             <x-exercise.row wire:key="pe-{{ $row['exercise']->id }}"
                                                             :program-exercise="$row['exercise']"
                                                             :number="$row['number']"
+                                                            :heading-level="2"
                                                             class="py-4"/>
                                         @endforeach
                                     </div>
@@ -417,7 +418,8 @@ new class extends Component
                                 @foreach ($block['rows'] as $row)
                                     <x-ui.card wire:key="pe-{{ $row['exercise']->id }}">
                                         <x-exercise.row :program-exercise="$row['exercise']"
-                                                        :number="$row['number']"/>
+                                                        :number="$row['number']"
+                                                        :heading-level="2"/>
                                     </x-ui.card>
                                 @endforeach
                             @endif

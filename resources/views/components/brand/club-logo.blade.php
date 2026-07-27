@@ -36,10 +36,29 @@
             ? $path
             : rescue(fn () => \Illuminate\Support\Facades\Storage::disk('public')->url($path), null, false);
     }
+
+    /*
+     | The logo's own pixel dimensions, so the browser can reserve the right box
+     | before the bytes arrive. The height is pinned in CSS and the width is
+     | `auto`, which means without these the header re-flows sideways the moment
+     | the image lands — a layout shift on the very first paint of every page.
+     |
+     | Read from the file rather than assumed, because the logo is whatever the
+     | club uploaded. `getimagesize` only reads the header, and `Setting::current()`
+     | is resolved once per request, so this is one cheap stat per page at worst.
+     */
+    $dimensions = rescue(
+        fn (): ?array => ($file = $settings?->logoFilePath()) ? (getimagesize($file) ?: null) : null,
+        null,
+        false,
+    );
 @endphp
 
 @if ($logo)
-    <img src="{{ $logo }}" alt="" {{ $attributes->class($size) }}>
+    <img src="{{ $logo }}"
+         alt=""
+         @if ($dimensions) width="{{ $dimensions[0] }}" height="{{ $dimensions[1] }}" @endif
+         {{ $attributes->class($size) }}>
 @else
     <x-brand.mark {{ $attributes->class($markClass) }}/>
 @endif

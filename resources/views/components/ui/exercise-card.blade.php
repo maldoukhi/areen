@@ -1,4 +1,4 @@
-@props(['exercise', 'showMuscle' => true])
+@props(['exercise', 'showMuscle' => true, 'headingLevel' => 3])
 
 {{--
   One exercise in a listing grid. Shared by /exercises and /muscles/{slug} so the
@@ -48,7 +48,7 @@
              class="aspect-4/3 w-full rounded-md bg-ink-900 object-cover">
     @endif
 
-    <h3 class="text-lg font-semibold leading-snug text-ink-50">{{ $exercise->name }}</h3>
+    <h{{ $headingLevel }} class="text-lg font-semibold leading-snug text-ink-50">{{ $exercise->name }}</h{{ $headingLevel }}>
 
     {{-- On /muscles/{slug} every card names the same group, so the page turns
          this line off rather than repeating itself down the grid. --}}

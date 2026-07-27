@@ -59,6 +59,8 @@ function resolveSource() {
             // A raster logo is placed as an image so its own artwork is untouched.
             markup: (size) =>
                 `<img src="data:image/png;base64,${data}" style="width:${size}px;height:${size}px;object-fit:contain">`,
+            // The same artwork as one URI, for the canvas the favicon is drawn in.
+            dataUri: `data:image/png;base64,${data}`,
         };
     }
 
@@ -69,10 +71,76 @@ function resolveSource() {
     return {
         label: 'public/brand/areen-mark.svg (Areen mark — club logo not present)',
         markup: (size) => `<div style="width:${size}px;height:${size}px">${svg}</div>`,
+        /*
+         * The mark inherits `currentColor`, which a bare <img> has no value for,
+         * so the brand colour is fixed into this copy — and only this copy. The
+         * file on disk is left alone.
+         */
+        dataUri: 'data:image/svg+xml;base64,' + Buffer.from(
+            svg.replace('<svg', '<svg fill="none" stroke="#61B5D1" color="#61B5D1"'),
+        ).toString('base64'),
     };
 }
 
-function render(chromium, source, { file, size, plate, scale }) {
+/**
+ * The browser-tab icon, and the one icon that has to be *small*.
+ *
+ * It cannot be screenshotted like the others: Chromium will not lay out a page
+ * below roughly 500px and clips the artwork instead (see the note above the
+ * render calls). Shipping the 512 render as the favicon is what happened
+ * instead, and it put a 59 KB image on every single page load for a 16px slot.
+ *
+ * So the page is laid out at 512 — a size Chromium is happy with — and the
+ * downscale is done inside it, by drawing the logo into a 48px canvas. The
+ * result is read back out through `--dump-dom`, which is how the bytes cross
+ * from the browser to here without an image library in between. 48px covers the
+ * 16 and 32 the tab actually asks for, and the file lands around 4 KB.
+ */
+function renderFavicon(chromium, dataUri, size = 48) {
+    if (! dataUri) return false;
+
+    writeFileSync(
+        tmp,
+        `<!doctype html><meta charset="utf-8">` +
+        `<body style="margin:0;width:512px;height:512px"><div id="out"></div><script>` +
+        `const img = new Image();` +
+        `img.onload = () => {` +
+        `  const c = document.createElement('canvas');` +
+        `  c.width = c.height = ${size};` +
+        `  const x = c.getContext('2d');` +
+        `  x.fillStyle = ${JSON.stringify(THEME)};` +
+        `  x.fillRect(0, 0, ${size}, ${size});` +
+        `  const s = Math.round(${size} * 0.8), o = Math.round((${size} - s) / 2);` +
+        `  x.drawImage(img, o, o, s, s);` +
+        `  document.getElementById('out').textContent = c.toDataURL('image/png');` +
+        `};` +
+        `img.src = ${JSON.stringify(dataUri)};` +
+        `</script></body>`,
+    );
+
+    const dom = execFileSync(chromium, [
+        '--headless',
+        '--disable-gpu',
+        '--no-sandbox',
+        '--hide-scrollbars',
+        '--virtual-time-budget=5000',
+        '--dump-dom',
+        `file://${tmp}`,
+    ], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'], maxBuffer: 64 * 1024 * 1024 });
+
+    const match = dom.match(/data:image\/png;base64,([A-Za-z0-9+/=]+)/);
+
+    if (! match) return false;
+
+    const out = resolve(root, 'public/favicon.png');
+    writeFileSync(out, Buffer.from(match[1], 'base64'));
+
+    console.log(`  ${'favicon.png'.padEnd(26)} ${size}×${size}`);
+
+    return true;
+}
+
+function render(chromium, source, { file, size, plate, scale, dir = brandDir }) {
     const inner = Math.round(size * scale);
 
     writeFileSync(
@@ -127,6 +195,10 @@ render(chromium, source, { file: 'icon-maskable-512.png', size: 512, plate: THEM
 // iOS rounds the corners itself and does not composite transparency, so this stays opaque.
 render(chromium, source, { file: 'apple-touch-icon.png', size: 512, plate: THEME, scale: 0.66 });
 render(chromium, source, { file: 'splash-logo.png', size: 512, plate: BACKGROUND, scale: 0.4 });
+
+if (! renderFavicon(chromium, source.dataUri)) {
+    console.warn('  favicon.png                could not be drawn — public/favicon.png left as it was');
+}
 
 rmSync(tmp, { force: true });
 

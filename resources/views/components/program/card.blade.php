@@ -1,4 +1,14 @@
-@props(['program'])
+@props([
+    'program',
+    /*
+     | The heading level the card's title is written at — NOT the program's
+     | training level, which is `$program->level`. A card nested under a section
+     | heading is an h3; a card that is the page's content, directly under the
+     | h1, is an h2. A skipped level reads as a missing section to a screen
+     | reader, so the page has to be able to say which it is.
+     */
+    'headingLevel' => 3,
+])
 
 {{--
   One program in the catalogue. The whole card is the link, so the touch target
@@ -34,13 +44,13 @@
 
     <div class="flex h-full flex-col gap-3 p-5 ps-6">
         <div class="flex items-start justify-between gap-4">
-            <h3 class="line-clamp-2 text-xl font-semibold leading-snug text-ink-50">
+            <h{{ $headingLevel }} class="line-clamp-2 text-xl font-semibold leading-snug text-ink-50">
                 {{ $program->name }}
-            </h3>
+            </h{{ $headingLevel }}>
 
             <span class="shrink-0 text-end leading-none">
                 <span class="tabular block text-[2rem] font-bold leading-none text-brand-400">{{ $program->days_count }}</span>
-                <span class="mt-1 block text-[0.6875rem] font-medium text-ink-400">{{ __('program.days.label') }}</span>
+                <span class="mt-1 block text-[0.6875rem] font-medium text-ink-300">{{ __('program.days.label') }}</span>
             </span>
         </div>
 

@@ -105,7 +105,7 @@ new class extends Component
                     <ul class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
                         @foreach ($this->programs as $program)
                             <li wire:key="program-{{ $program->getKey() }}" class="flex">
-                                <x-program.card :program="$program" class="w-full"/>
+                                <x-program.card :program="$program" :heading-level="2" class="w-full"/>
                             </li>
                         @endforeach
                     </ul>

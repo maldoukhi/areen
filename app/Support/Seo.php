@@ -162,13 +162,29 @@ final class Seo
             : $base.'?'.http_build_query([self::LOCALE_QUERY => $locale]);
     }
 
+    /**
+     * The language a URL with no `?lang=` is served in — the one `x-default`
+     * and the canonical address belong to.
+     *
+     * Read from `app.fallback_locale`, NOT from `app.locale`, and that is not a
+     * detail: `Application::setLocale()` writes the request's locale back into
+     * `config('app.locale')`, so reading it here made "the default language"
+     * mean "whatever this reader happens to be using". An English reader was
+     * served `hreflang="ar" href="…?lang=ar"` with the bare URL claimed for
+     * English — the alternates inverted themselves per visitor. The fallback is
+     * the one setting nothing rewrites mid-request.
+     */
     public static function defaultLocale(): string
     {
-        $configured = (string) config('app.locale');
+        $supported = (array) config('areen.locales', []);
 
-        return array_key_exists($configured, (array) config('areen.locales', []))
-            ? $configured
-            : (string) config('app.fallback_locale');
+        foreach ([config('app.fallback_locale'), config('app.locale')] as $candidate) {
+            if (is_string($candidate) && array_key_exists($candidate, $supported)) {
+                return $candidate;
+            }
+        }
+
+        return (string) array_key_first($supported);
     }
 
     /**

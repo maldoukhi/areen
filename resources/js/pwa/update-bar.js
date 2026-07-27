@@ -2,56 +2,106 @@
  * `<areen-update-bar>` — "a new version is ready", never a silent swap.
  *
  * `register-sw.js` registers the worker with `registerType: 'prompt'` and
- * dispatches `areen:update-available` with an `apply()` callback once a new
- * worker is installed and waiting. This is the visible half: a bar that offers
- * the reload and does nothing until it is tapped.
+ * dispatches `areen:update-available` once a replacement is installed and
+ * waiting. This is the visible half: a bar that offers the reload and does
+ * nothing until it is tapped.
  *
  * Swapping assets out from under somebody who is mid-set is how you lose their
  * set, so the decision stays with them.
+ *
+ * The bar answers to the registration, not to a remembered event. An earlier
+ * version parked the callback in a module variable and showed itself whenever
+ * that variable was set — and because `wire:navigate` swaps the body while the
+ * module lives on, the element reconnected on every navigation and the bar came
+ * back every single time, long after the update was gone. The only question
+ * asked now is whether a worker is waiting right now.
  */
 
-/*
- * The event can land before the element upgrades, so the last one is parked here
- * at module scope — the same trick the install banner uses for
- * `beforeinstallprompt`.
- */
-let pendingApply = null;
+const DISMISS_KEY = 'areen.update-dismissed';
+
+// A hint only. Whether to show is decided by looking at the registration.
+let latestRegistration = null;
 
 if (typeof window !== 'undefined') {
     window.addEventListener('areen:update-available', (event) => {
-        if (typeof event.detail?.apply === 'function') {
-            pendingApply = event.detail.apply;
-        }
+        latestRegistration = event.detail?.registration ?? null;
     });
+}
+
+async function waitingWorker() {
+    if (! ('serviceWorker' in navigator)) return null;
+
+    const registration = latestRegistration
+        ?? await navigator.serviceWorker.getRegistration('/').catch(() => null);
+
+    return registration?.waiting ?? null;
+}
+
+/**
+ * A dismissal is remembered against the waiting worker's own script URL, so
+ * declining this update stays declined while a genuinely newer one still gets to
+ * ask. Session storage, because a new session deserves the offer again.
+ */
+function dismissedFor(worker) {
+    try {
+        return window.sessionStorage.getItem(DISMISS_KEY) === worker.scriptURL;
+    } catch {
+        return false;
+    }
+}
+
+function rememberDismissal(worker) {
+    try {
+        window.sessionStorage.setItem(DISMISS_KEY, worker.scriptURL);
+    } catch {
+        // Private mode. Not remembering is a smaller problem than throwing.
+    }
 }
 
 class UpdateBar extends HTMLElement {
     connectedCallback() {
         this.applyButton = this.querySelector('[data-action="apply"]');
+        this.dismissButton = this.querySelector('[data-action="dismiss"]');
         this.idleLabel = this.querySelector('[data-label="apply"]');
         this.busyLabel = this.querySelector('[data-label="applying"]');
 
         this.applyButton?.addEventListener('click', () => this.apply());
+        this.dismissButton?.addEventListener('click', () => this.dismiss());
 
-        this.onAvailable = () => this.show();
+        this.onAvailable = () => this.refresh();
         window.addEventListener('areen:update-available', this.onAvailable);
 
-        if (pendingApply) this.show();
+        this.refresh();
     }
 
     disconnectedCallback() {
         window.removeEventListener('areen:update-available', this.onAvailable);
     }
 
-    show() {
-        this.hidden = false;
+    /** Visible only while a worker is genuinely waiting and has not been declined. */
+    async refresh() {
+        const worker = await waitingWorker();
+
+        this.hidden = ! worker || dismissedFor(worker);
     }
 
-    apply() {
-        if (! pendingApply) return;
+    async dismiss() {
+        const worker = await waitingWorker();
 
-        // The page reloads on `controllerchange`; until then, make it obvious the
-        // tap landed and make a second tap impossible.
+        if (worker) rememberDismissal(worker);
+
+        this.hidden = true;
+    }
+
+    async apply() {
+        const worker = await waitingWorker();
+
+        if (! worker) {
+            this.hidden = true;
+
+            return;
+        }
+
         if (this.applyButton) {
             this.applyButton.disabled = true;
             this.applyButton.setAttribute('aria-busy', 'true');
@@ -60,15 +110,14 @@ class UpdateBar extends HTMLElement {
         if (this.idleLabel) this.idleLabel.hidden = true;
         if (this.busyLabel) this.busyLabel.hidden = false;
 
-        const apply = pendingApply;
-        pendingApply = null;
+        worker.postMessage({ type: 'SKIP_WAITING' });
 
-        try {
-            apply();
-        } catch {
-            // The waiting worker went away on its own. The next load picks it up.
-            this.hidden = true;
-        }
+        /*
+         * `register-sw.js` reloads on `controllerchange`. If that never arrives —
+         * the worker died, or the browser declined the handover — reload anyway
+         * rather than leaving a disabled button on screen for good.
+         */
+        window.setTimeout(() => window.location.reload(), 3000);
     }
 }
 

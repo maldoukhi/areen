@@ -2,6 +2,14 @@
     'programExercise',
     'number' => null,
     'media' => null,
+    /*
+     | The heading level this row's name is written at. A row nested under a
+     | section heading is an h3; a row that IS the page's content, directly under
+     | the h1 — the day view — is an h2. A skipped level reads to a screen reader
+     | as a missing section rather than as a smaller heading, so the caller has to
+     | be able to say which it is.
+     */
+    'headingLevel' => 3,
 ])
 
 {{--
@@ -50,7 +58,7 @@
               aria-hidden="true">{{ $number }}</span>
 
         <div class="flex min-w-0 flex-1 items-start justify-between gap-3">
-            <h3 class="min-w-0 text-base font-semibold leading-snug text-ink-50">
+            <h{{ $headingLevel }} class="min-w-0 text-base font-semibold leading-snug text-ink-50">
                 @if ($exercise)
                     {{--
                       The padding buys the link a 44px tall target on a single-line
@@ -64,7 +72,7 @@
                     {{-- The exercise was soft-deleted out from under the program. --}}
                     {{ __('exercise.singular') }}
                 @endif
-            </h3>
+            </h{{ $headingLevel }}>
 
             {{-- The hero figure: 20px, brand-400, tabular. DESIGN.md §5. --}}
             <p class="tabular shrink-0 text-end text-xl font-bold leading-none text-brand-400">

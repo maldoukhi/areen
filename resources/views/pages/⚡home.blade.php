@@ -15,8 +15,9 @@ new class extends Component
             'programs' => Program::query()->published()->ordered()->take(4)->get(),
             'muscles' => MuscleGroup::query()->ordered()->withCount('exercises')->get(),
             'exerciseCount' => Exercise::query()->active()->count(),
-            // The club's own name leads the document title. A search result that
-            // says only "عرين" tells a visitor nothing about which gym this is.
+            // The club's own name leads the document title. A search result
+            // carrying only the platform's name tells a visitor nothing about
+            // which gym they have found.
             'club' => Setting::current(),
         ];
     }

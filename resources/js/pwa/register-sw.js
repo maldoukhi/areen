@@ -49,10 +49,15 @@ export function registerServiceWorker() {
     });
 }
 
+/**
+ * The registration itself is handed over rather than a closure, so the bar can
+ * ask whether a worker is still waiting instead of trusting that one was, once.
+ */
 function announceUpdate(registration) {
     window.dispatchEvent(
         new CustomEvent('areen:update-available', {
             detail: {
+                registration,
                 apply: () => registration.waiting?.postMessage({ type: 'SKIP_WAITING' }),
             },
         }),

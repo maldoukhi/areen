@@ -14,6 +14,7 @@ return [
     ],
 
     'update' => [
+        'dismiss' => 'Dismiss',
         'body' => 'An update for Areen is ready.',
         'action' => 'Reload',
         'applying' => 'Updating',

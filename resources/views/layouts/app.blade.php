@@ -33,20 +33,28 @@
     <link rel="manifest" href="{{ route('manifest') }}">
 
     {{--
-      The two weights that draw the first screen — the 400 the body is set in and
-      the 700 every page's h1 uses — in the Arabic subset, which is what the
-      default locale actually renders. They are discovered late otherwise: the
-      browser has to fetch app.css, parse it, lay out the text and only then
-      learn which @font-face it needs, which is a second round trip in front of
-      the first paint on a gym connection.
+      ONE font is preloaded, and the count is the whole point.
 
-      Only two of the eight files are preloaded on purpose. Preloading all of
-      them would put ~257 KB of fonts ahead of the stylesheet and make the page
-      slower, not faster; the 500/600 weights and the Latin subsets are still
-      fetched normally, when something on the page needs them.
+      Without a preload the browser only learns it needs this file after it has
+      fetched app.css, parsed it and laid the text out, so the Arabic 400 is
+      requested at ~1.1 s and lands at ~2.9 s — text paints in a fallback and
+      reflows into Plex a second and a half later.
+
+      Measured in headless Chromium at 390×844, throttled to 1.6 Mbit / 150 ms
+      RTT, median of 7 cold loads of `/`:
+
+        no preload            FCP/LCP 1140 ms   CLS 0.0173   font ready 2888 ms
+        preload 400 only      FCP/LCP 1144 ms   CLS 0.0027   font ready  949 ms
+        preload 400 + 700     FCP/LCP 1588 ms   CLS 0.0005   font ready 1380 ms
+
+      So preloading the body weight is free — it is ready before first paint and
+      takes the swap out — while adding the 700 puts another 43 KB in front of
+      the render-blocking stylesheet and costs 448 ms of FCP and LCP to remove a
+      CLS that was already far inside the good band. One file, not two, and not
+      eight: the 500/600 weights and the Latin subsets are fetched normally,
+      when something on the page actually needs them.
     --}}
     <link rel="preload" href="/fonts/plex-arabic-arabic-400.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="/fonts/plex-arabic-arabic-700.woff2" as="font" type="font/woff2" crossorigin>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
