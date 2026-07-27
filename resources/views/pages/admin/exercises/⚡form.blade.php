@@ -245,7 +245,7 @@ class extends Component
                 <x-ui.field :label="__('exercise.muscle.primary')" id="exercise-muscle" required :error="$errors->first('muscle_group_id')">
                     <x-admin.select id="exercise-muscle" wire:model="muscle_group_id" :error="filled($errors->first('muscle_group_id'))">
                         @foreach ($muscles as $muscleGroup)
-                            <option value="{{ $muscleGroup->id }}">{{ $muscleGroup->name }}</option>
+                            <option wire:key="muscle-{{ $muscleGroup->id }}" value="{{ $muscleGroup->id }}">{{ $muscleGroup->name }}</option>
                         @endforeach
                     </x-admin.select>
                 </x-ui.field>
@@ -272,7 +272,7 @@ class extends Component
                     <x-admin.select id="exercise-equipment" wire:model="equipment" :error="filled($errors->first('equipment'))">
                         <option value="">{{ __('exercise.equipment.none') }}</option>
                         @foreach ($equipmentOptions as $option)
-                            <option value="{{ $option }}">{{ __('exercise.equipment.'.$option) }}</option>
+                            <option wire:key="equipment-{{ $option }}" value="{{ $option }}">{{ __('exercise.equipment.'.$option) }}</option>
                         @endforeach
                     </x-admin.select>
                 </x-ui.field>
@@ -280,7 +280,7 @@ class extends Component
                 <x-ui.field :label="__('exercise.difficulty.label')" id="exercise-difficulty" :error="$errors->first('difficulty')">
                     <x-admin.select id="exercise-difficulty" wire:model="difficulty" :error="filled($errors->first('difficulty'))">
                         @foreach ($difficulties as $case)
-                            <option value="{{ $case->value }}">{{ $case->label() }}</option>
+                            <option wire:key="difficulty-{{ $case->value }}" value="{{ $case->value }}">{{ $case->label() }}</option>
                         @endforeach
                     </x-admin.select>
                 </x-ui.field>

@@ -325,8 +325,13 @@ class extends Component
         </div>
     </div>
 
+    {{--
+      On a phone the builder comes first: the reason to open this screen is to
+      put exercises on the day, not to rename it. On a wide screen the two sit
+      side by side, the day's details in the inline-start column.
+    --}}
     <div class="grid gap-6 lg:grid-cols-[20rem_minmax(0,1fr)]">
-        <form wire:submit="saveDay" class="flex flex-col gap-4 lg:order-2 lg:col-start-1 lg:row-start-1">
+        <form wire:submit="saveDay" class="order-2 flex flex-col gap-4 lg:order-none lg:col-start-1 lg:row-start-1">
             <x-ui.card class="flex flex-col gap-5">
                 <h3 class="text-lg font-semibold text-ink-50">{{ __('admin.day.settings') }}</h3>
 
@@ -340,7 +345,7 @@ class extends Component
                     <x-admin.select id="day-focus" wire:model="focus_muscle_id" :error="filled($errors->first('focus_muscle_id'))">
                         <option value="">{{ __('admin.fields.none') }}</option>
                         @foreach ($muscles as $muscleGroup)
-                            <option value="{{ $muscleGroup->id }}">{{ $muscleGroup->name }}</option>
+                            <option wire:key="muscle-{{ $muscleGroup->id }}" value="{{ $muscleGroup->id }}">{{ $muscleGroup->name }}</option>
                         @endforeach
                     </x-admin.select>
                 </x-ui.field>
@@ -359,7 +364,7 @@ class extends Component
             </x-ui.card>
         </form>
 
-        <div class="flex flex-col gap-4 lg:col-start-2 lg:row-start-1">
+        <div class="order-1 flex flex-col gap-4 lg:order-none lg:col-start-2 lg:row-start-1">
             @if ($is_rest_day)
                 <p class="rounded-md border border-warning/40 bg-warning/10 px-4 py-3 text-sm leading-normal text-warning">
                     {{ __('admin.day.rest_notice') }}
@@ -416,7 +421,10 @@ class extends Component
                                                 <span class="tabular">{{ __('exercise.prescription.rest_value', ['seconds' => $programExercise->rest_seconds]) }}</span>
 
                                                 @if ($programExercise->superset_group)
-                                                    <span class="text-ember">{{ __('exercise.prescription.superset') }} {{ $programExercise->superset_group }}</span>
+                                                    {{-- A grouping label, not a record: ember is capped at one appearance per screen (DESIGN.md §2). --}}
+                                                    <span class="rounded-full bg-ink-900 px-2 py-0.5 text-ink-200">
+                                                        {{ __('exercise.prescription.superset') }} {{ $programExercise->superset_group }}
+                                                    </span>
                                                 @endif
                                             </p>
                                         </div>
@@ -464,7 +472,7 @@ class extends Component
                                                 <x-admin.select id="row-superset" wire:model="row.superset_group" :error="filled($errors->first('row.superset_group'))">
                                                     <option value="">{{ __('admin.fields.none') }}</option>
                                                     @foreach ($supersets as $group)
-                                                        <option value="{{ $group }}">{{ $group }}</option>
+                                                        <option wire:key="superset-{{ $group }}" value="{{ $group }}">{{ $group }}</option>
                                                     @endforeach
                                                 </x-admin.select>
                                             </x-ui.field>
@@ -501,7 +509,7 @@ class extends Component
                                 <x-admin.select id="library-muscle" wire:model.live="muscle">
                                     <option value="">{{ __('admin.filters.all_muscles') }}</option>
                                     @foreach ($muscles as $muscleGroup)
-                                        <option value="{{ $muscleGroup->id }}">{{ $muscleGroup->name }}</option>
+                                        <option wire:key="muscle-{{ $muscleGroup->id }}" value="{{ $muscleGroup->id }}">{{ $muscleGroup->name }}</option>
                                     @endforeach
                                 </x-admin.select>
                             </x-ui.field>

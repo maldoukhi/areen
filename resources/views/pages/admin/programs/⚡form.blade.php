@@ -287,7 +287,7 @@ class extends Component
                 <x-ui.field :label="__('program.level.label')" id="program-level" :error="$errors->first('level')">
                     <x-admin.select id="program-level" wire:model="level" :error="filled($errors->first('level'))">
                         @foreach ($levels as $case)
-                            <option value="{{ $case->value }}">{{ $case->label() }}</option>
+                            <option wire:key="level-{{ $case->value }}" value="{{ $case->value }}">{{ $case->label() }}</option>
                         @endforeach
                     </x-admin.select>
                 </x-ui.field>
@@ -296,7 +296,7 @@ class extends Component
                     <x-admin.select id="program-goal" wire:model="goal" :error="filled($errors->first('goal'))">
                         <option value="">{{ __('admin.fields.none') }}</option>
                         @foreach ($goals as $goal)
-                            <option value="{{ $goal }}">{{ __('program.goal.'.$goal) }}</option>
+                            <option wire:key="goal-{{ $goal }}" value="{{ $goal }}">{{ __('program.goal.'.$goal) }}</option>
                         @endforeach
                     </x-admin.select>
                 </x-ui.field>

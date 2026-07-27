@@ -207,7 +207,7 @@ class extends Component
                 <x-ui.field :label="__('admin.trainees.role')" id="trainee-role" :error="$errors->first('role')">
                     <x-admin.select id="trainee-role" wire:model="role" :error="filled($errors->first('role'))">
                         @foreach ($roles as $case)
-                            <option value="{{ $case->value }}">{{ $case->label() }}</option>
+                            <option wire:key="role-{{ $case->value }}" value="{{ $case->value }}">{{ $case->label() }}</option>
                         @endforeach
                     </x-admin.select>
                 </x-ui.field>
@@ -215,7 +215,7 @@ class extends Component
                 <x-ui.field :label="__('auth.account.language')" id="trainee-locale" :error="$errors->first('locale')">
                     <x-admin.select id="trainee-locale" wire:model="locale" :error="filled($errors->first('locale'))">
                         @foreach ($locales as $code => $entry)
-                            <option value="{{ $code }}">{{ $entry['name'] ?? $code }}</option>
+                            <option wire:key="locale-{{ $code }}" value="{{ $code }}">{{ $entry['name'] ?? $code }}</option>
                         @endforeach
                     </x-admin.select>
                 </x-ui.field>
@@ -251,7 +251,7 @@ class extends Component
                                 <x-admin.select id="assign-program" wire:model="program_id" :error="filled($errors->first('program_id'))">
                                     <option value="">{{ __('admin.trainees.no_program') }}</option>
                                     @foreach ($programs as $program)
-                                        <option value="{{ $program->id }}">{{ $program->name }}</option>
+                                        <option wire:key="program-{{ $program->id }}" value="{{ $program->id }}">{{ $program->name }}</option>
                                     @endforeach
                                 </x-admin.select>
                             </x-ui.field>

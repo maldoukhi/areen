@@ -164,7 +164,7 @@ class extends Component
                     <x-admin.select id="programs-level" wire:model.live="level">
                         <option value="">{{ __('admin.filters.all_levels') }}</option>
                         @foreach ($levels as $case)
-                            <option value="{{ $case->value }}">{{ $case->label() }}</option>
+                            <option wire:key="level-{{ $case->value }}" value="{{ $case->value }}">{{ $case->label() }}</option>
                         @endforeach
                     </x-admin.select>
                 </x-ui.field>

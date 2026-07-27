@@ -143,7 +143,7 @@ class extends Component
                     <x-admin.select id="exercises-muscle" wire:model.live="muscle">
                         <option value="">{{ __('admin.filters.all_muscles') }}</option>
                         @foreach ($muscles as $muscleGroup)
-                            <option value="{{ $muscleGroup->id }}">{{ $muscleGroup->name }}</option>
+                            <option wire:key="muscle-{{ $muscleGroup->id }}" value="{{ $muscleGroup->id }}">{{ $muscleGroup->name }}</option>
                         @endforeach
                     </x-admin.select>
                 </x-ui.field>
@@ -152,7 +152,7 @@ class extends Component
                     <x-admin.select id="exercises-difficulty" wire:model.live="difficulty">
                         <option value="">{{ __('exercise.difficulty.any') }}</option>
                         @foreach ($difficulties as $case)
-                            <option value="{{ $case->value }}">{{ $case->label() }}</option>
+                            <option wire:key="difficulty-{{ $case->value }}" value="{{ $case->value }}">{{ $case->label() }}</option>
                         @endforeach
                     </x-admin.select>
                 </x-ui.field>

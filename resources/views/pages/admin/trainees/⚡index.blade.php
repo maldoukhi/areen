@@ -164,7 +164,7 @@ class extends Component
                 <x-ui.field :label="__('admin.trainees.role')" id="invite-role" :error="$errors->first('newRole')">
                     <x-admin.select id="invite-role" wire:model="newRole" :error="filled($errors->first('newRole'))">
                         @foreach ($roles as $case)
-                            <option value="{{ $case->value }}">{{ $case->label() }}</option>
+                            <option wire:key="role-{{ $case->value }}" value="{{ $case->value }}">{{ $case->label() }}</option>
                         @endforeach
                     </x-admin.select>
                 </x-ui.field>
@@ -172,7 +172,7 @@ class extends Component
                 <x-ui.field :label="__('auth.account.language')" id="invite-locale" :error="$errors->first('locale')">
                     <x-admin.select id="invite-locale" wire:model="locale" :error="filled($errors->first('locale'))">
                         @foreach ($locales as $code => $entry)
-                            <option value="{{ $code }}">{{ $entry['name'] ?? $code }}</option>
+                            <option wire:key="locale-{{ $code }}" value="{{ $code }}">{{ $entry['name'] ?? $code }}</option>
                         @endforeach
                     </x-admin.select>
                 </x-ui.field>
@@ -200,7 +200,7 @@ class extends Component
                     <x-admin.select id="trainees-role" wire:model.live="role">
                         <option value="">{{ __('admin.filters.all_roles') }}</option>
                         @foreach ($roles as $case)
-                            <option value="{{ $case->value }}">{{ $case->label() }}</option>
+                            <option wire:key="role-{{ $case->value }}" value="{{ $case->value }}">{{ $case->label() }}</option>
                         @endforeach
                     </x-admin.select>
                 </x-ui.field>
